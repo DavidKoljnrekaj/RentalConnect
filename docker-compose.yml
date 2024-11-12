@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - api-gateway
+
+  api-gateway:
+    build:
+      context: ./services/api-gateway
+    ports:
+      - "8000:8000"
+    depends_on:
+      - auth-service
+      - listing-service
+      - search-service
+
+  auth-service:
+    build:
+      context: ./services/auth-service
+    ports:
+      - "3001:3001"
+    environment:
+      - MONGO_URI=${MONGO_URI} 
+
+  listing-service:
+    build:
+      context: ./services/listing-service
+    ports:
+      - "3002:3002"
+    environment:
+      - MONGO_URI=${MONGO_URI}  
+
+  search-service:
+    build:
+      context: ./services/search-service
+    ports:
+      - "3003:3003"
+    environment:
+      - MONGO_URI=${MONGO_URI} 
