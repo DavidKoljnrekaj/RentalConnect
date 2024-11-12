@@ -128,3 +128,14 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# React
+/build
+/.cache
+.DS_Store
+
+# Docker
+docker-compose.override.yml
+
+# Typescript
+*.tsbuildinfo
