@@ -85,7 +85,7 @@ jobs:
           docker push /search-service
           docker push /api-gateway
 
-      # Deploy to Google Cloud (or your preferred platform)
+      # Deploy to Google Cloud 
       - name: Deploy to Google Cloud
         run: |
           # FINISH WHEN GCLOUD IS SETUP
