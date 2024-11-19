@@ -1,0 +1,50 @@
+name: CI Pipeline (development)
+
+# Trigger the workflow on pushes to the main branch and on pull requests
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+        # Checkout the code
+        - name: Checkout code
+          uses: actions/checkout@v3
+  
+        # Setup Node.js
+        - name: Set up Node.js
+          uses: actions/setup-node@v3
+          with:
+            node-version: 16
+  
+        # Install dependencies and run tests for each service
+        - name: Install dependencies and run tests
+          working-directory: ./services/auth-service
+          run: |
+            npm install
+            npm test
+  
+        - name: Install dependencies and run tests
+          working-directory: ./services/listing-service
+          run: |
+            npm install
+            npm test
+  
+        - name: Install dependencies and run tests
+          working-directory: ./services/search-service
+          run: |
+            npm install
+            npm test
+  
+        - name: Install frontend dependencies and run tests
+          working-directory: ./frontend
+          run: |
+            npm install
+            npm test
