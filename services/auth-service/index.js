@@ -1,6 +1,9 @@
+// src/index.js
 const express = require('express');
-const connectToDatabase = require('../../shared/config/dbConfig'); 
+const mongoose = require('mongoose');
 require('dotenv').config();
+
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -8,20 +11,12 @@ const PORT = process.env.PORT || 3001;
 // Middleware
 app.use(express.json());
 
-// Connect to the Database
-connectToDatabase(/*process.env.MONGO_URI*/);
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('Connected to MongoDB'))
+  .catch((err) => console.error('Failed to connect to MongoDB', err));
 
 // Routes
-app.get('/', (req, res) => {
-  res.send('Auth Service is running');
-});
+app.use('/auth', authRoutes);
 
-
-app.post('/login', (req, res) => {
-    //finish
-  res.json({ message: 'Logged in successfuly' });
-});
-
-app.listen(PORT, () => {
-  console.log(`Auth Service running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Auth Service running on port ${PORT}`));
