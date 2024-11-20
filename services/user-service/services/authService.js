@@ -2,9 +2,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 
-exports.createUser = async (username, email, password) => {
+exports.createUser = async (username, email, password, phoneNumber) => {
   const hashedPassword = await bcrypt.hash(password, 10);
-  const newUser = new User({ username, email, password: hashedPassword });
+  const newUser = new User({ username, email, password: hashedPassword, phoneNumber });
   await newUser.save();
   return { username: newUser.username, email: newUser.email }; // Return user details without the password
 };
@@ -18,4 +18,9 @@ exports.authenticateUser = async (email, password) => {
 
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
   return token;
+};
+
+exports.verifyToken = (token) => {
+  if (!token) throw new Error('No token provided');
+  return jwt.verify(token, process.env.JWT_SECRET);
 };
