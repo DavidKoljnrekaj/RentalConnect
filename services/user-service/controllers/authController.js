@@ -1,11 +1,11 @@
 const User = require('../models/userModel');
 const authService = require('../services/authService');
 
-exports.signup = async (req, res) => {
+exports.register = async (req, res) => {
   try {
     const { username, email, password, phoneNumber } = req.body;
     const newUser = await authService.createUser(username, email, password, phoneNumber);
-    res.status(201).json({ message: 'User created successfully', user: newUser });
+    res.status(201).json({ message: 'User registered successfully', user: newUser });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

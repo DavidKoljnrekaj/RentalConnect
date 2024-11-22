@@ -5,7 +5,8 @@ exports.getUser = async (req, res) => {
     const userId = req.params.id;
     const user = await userService.getUserById(userId);
     res.json(user);
-  } catch (error) {
+  } catch (error)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+   {
     res.status(404).json({ error: error.message });
   }
 };
