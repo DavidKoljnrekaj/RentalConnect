@@ -1,22 +1,18 @@
-# Use a Node.js base image
-FROM node:16
-
-# Set the working directory
+# Stage 1: Build the React app
+FROM node:16-alpine AS build
 WORKDIR /app
 
-# Copy package.json and install dependencies
-COPY package.json ./
-RUN npm install
+# Install dependencies
+COPY package.json package-lock.json ./
+RUN npm install 
 
-# Copy the rest of the application code
+# Copy application source code and build the app
 COPY . .
-
-# Build the React app for production
 RUN npm run build
 
-# Use a lightweight web server for serving the built app
+# Stage 2: Serve the app using Nginx
 FROM nginx:alpine
-COPY --from=0 /app/build /usr/share/nginx/html
+COPY --from=build /app/build /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
