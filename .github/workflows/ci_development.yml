@@ -26,7 +26,7 @@ jobs:
   
         # Install dependencies and run tests for each service
         - name: Install dependencies and run tests
-          working-directory: ./services/auth-service
+          working-directory: ./services/user-service
           run: |
             npm install
             npm test
