@@ -1,4 +1,3 @@
-// src/index.js
 const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
@@ -27,4 +26,5 @@ if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => console.log(`User Service running on port ${PORT}`));
 }
 else {
-module.exports = app}
+module.exports = app
+}
