@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
   workflow_dispatch:
 
 jobs:
@@ -53,7 +50,7 @@ jobs:
 
       - name: Configure Google cloud
         run: |
-          gcloud components install gke-gcloud-auth-plugin
+          sudo apt-get install -y google-cloud-cli-gke-gcloud-auth-plugin
           gcloud auth configure-docker
 
       - name: Build and Push Updated Docker Images
