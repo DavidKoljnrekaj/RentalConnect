@@ -48,19 +48,31 @@ jobs:
         run: |
           gcloud auth configure-docker
 
-      - name: Build and Push Docker Images
+      - name: Build and Push Updated Docker Images
         run: |
-          docker build -t gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/frontend ./frontend
-          docker build -t gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/api-gateway ./services/api-gateway
-          docker build -t gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/user-service ./services/user-service
-          docker build -t gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/listing-service ./services/listing-service
-          docker build -t gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/search-service ./services/search-service
-
-          docker push gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/frontend
-          docker push gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/api-gateway
-          docker push gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/user-service
-          docker push gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/listing-service
-          docker push gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/search-service
+          CHANGED_DIRS=$(git diff --name-only HEAD~1 HEAD | cut -d'/' -f2 | sort | uniq)
+          for dir in $CHANGED_DIRS; do
+            if [ "$dir" = "frontend" ]; then
+              docker build -t europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/frontend ./frontend
+              docker push europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/frontend
+            fi
+            if [ "$dir" = "api-gateway" ]; then
+              docker build -t europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/api-gateway ./services/api-gateway
+              docker push europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/api-gateway
+            fi
+            if [ "$dir" = "user-service" ]; then
+              docker build -t europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/user-service ./services/user-service
+              docker push europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/user-service
+            fi
+            if [ "$dir" = "listing-service" ]; then
+              docker build -t europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/listing-service ./services/listing-service
+              docker push europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/listing-service
+            fi
+            if [ "$dir" = "search-service" ]; then
+              docker build -t europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/search-service ./services/search-service
+              docker push europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/search-service
+            fi
+          done
 
   deploy:
     runs-on: ubuntu-latest
@@ -86,10 +98,23 @@ jobs:
             --region ${{ secrets.GKE_CLUSTER_REGION }} \
             --project ${{ secrets.GCLOUD_PROJECT_ID }}
 
-      - name: Deploy to GKE
+      - name: Deploy Updated Services to GKE
         run: |
-          kubectl apply -f k8s/frontend-deployment.yaml
-          kubectl apply -f k8s/api-gateway-deployment.yaml
-          kubectl apply -f k8s/user-service-deployment.yaml
-          kubectl apply -f k8s/listing-service-deployment.yaml
-          kubectl apply -f k8s/search-service-deployment.yaml
+          CHANGED_DIRS=$(git diff --name-only HEAD~1 HEAD | cut -d'/' -f2 | sort | uniq)
+          for dir in $CHANGED_DIRS; do
+            if [ "$dir" = "frontend" ] && [ -f k8s/frontend-deployment.yaml ]; then
+              kubectl apply -f k8s/frontend-deployment.yaml
+            fi
+            if [ "$dir" = "api-gateway" ] && [ -f k8s/api-gateway-deployment.yaml ]; then
+              kubectl apply -f k8s/api-gateway-deployment.yaml
+            fi
+            if [ "$dir" = "user-service" ] && [ -f k8s/user-service-deployment.yaml ]; then
+              kubectl apply -f k8s/user-service-deployment.yaml
+            fi
+            if [ "$dir" = "listing-service" ] && [ -f k8s/listing-service-deployment.yaml ]; then
+              kubectl apply -f k8s/listing-service-deployment.yaml
+            fi
+            if [ "$dir" = "search-service" ] && [ -f k8s/search-service-deployment.yaml ]; then
+              kubectl apply -f k8s/search-service-deployment.yaml
+            fi
+          done
