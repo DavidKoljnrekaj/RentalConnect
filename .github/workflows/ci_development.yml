@@ -4,14 +4,17 @@ name: CI Pipeline (development)
 on:
   push:
     branches:
-      - main
+      - development
   pull_request:
     branches:
-      - main
+      - development
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    env: 
+      MONGO_URI: ${{ secrets.MONGO_URI }}
 
     steps:
         # Checkout the code
@@ -26,10 +29,12 @@ jobs:
   
         # Install dependencies and run tests for each service
         - name: Install dependencies and run tests
-          working-directory: ./services/auth-service
+          working-directory: ./services/user-service
+          env: 
+            JWT_SECRET: ${{ secrets.JWT_SECRET }}
           run: |
             npm install
-            npm test
+            npm test 
   
         - name: Install dependencies and run tests
           working-directory: ./services/listing-service

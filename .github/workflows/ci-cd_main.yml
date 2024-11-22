@@ -1,6 +1,5 @@
 name: CI/CD Pipeline (main)
 
-# Trigger the workflow on pushes to the main branch and on pull requests
 on:
   push:
     branches:
@@ -8,84 +7,122 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
+    env: 
+      MONGO_URI: ${{ secrets.MONGO_URI }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
     steps:
-      # Checkout the code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Setup Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 16
 
-      # Install dependencies and run tests for each service
-      - name: Install dependencies and run tests
-        working-directory: ./services/auth-service
+      - name: Run tests for all services
         run: |
-          npm install
-          npm test
+          for dir in ./services/* ./frontend; do
+            echo "Running tests in $dir"
+            cd $dir
+            npm install
+            npm test || exit 1
+            cd -
+          done
 
-      - name: Install dependencies and run tests
-        working-directory: ./services/listing-service
-        run: |
-          npm install
-          npm test
+  push-images:
+    runs-on: ubuntu-latest
+    needs: build
 
-      - name: Install dependencies and run tests
-        working-directory: ./services/search-service
-        run: |
-          npm install
-          npm test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
 
-      - name: Install frontend dependencies and run tests
-        working-directory: ./frontend
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCLOUD_AUTH_JSON }}
+
+      - name: Configure Google cloud
         run: |
-          npm install
-          npm test
+          gcloud components install gke-gcloud-auth-plugin
+          gcloud auth configure-docker
+
+      - name: Build and Push Updated Docker Images
+        run: |
+          CHANGED_DIRS=$(git diff --name-only HEAD~1 HEAD | cut -d'/' -f2 | sort | uniq)
+          for dir in $CHANGED_DIRS; do
+            if [ "$dir" = "frontend" ]; then
+              docker build -t europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/frontend ./frontend
+              docker push europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/frontend
+            fi
+            if [ "$dir" = "api-gateway" ]; then
+              docker build -t europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/api-gateway ./services/api-gateway
+              docker push europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/api-gateway
+            fi
+            if [ "$dir" = "user-service" ]; then
+              docker build -t europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/user-service ./services/user-service
+              docker push europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/user-service
+            fi
+            if [ "$dir" = "listing-service" ]; then
+              docker build -t europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/listing-service ./services/listing-service
+              docker push europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/listing-service
+            fi
+            if [ "$dir" = "search-service" ]; then
+              docker build -t europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/search-service ./services/search-service
+              docker push europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/search-service
+            fi
+          done
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build
-    if: github.ref == 'refs/heads/main'
-    
+    needs: push-images
+
     steps:
-      # Checkout the code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Set up Docker
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v2
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCLOUD_AUTH_JSON }}
 
-      # Build Docker images (add usernameeeee)
-      - name: Build and tag Docker images
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: v1.22.0
+
+      - name: Configure kubectl for GKE
         run: |
-          docker build -t /frontend ./frontend
-          docker build -t /auth-service ./services/auth-service
-          docker build -t /listing-service ./services/listing-service
-          docker build -t /search-service ./services/search-service
-          docker build -t /api-gateway ./services/api-gateway
+          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER_NAME }} \
+            --region ${{ secrets.GKE_CLUSTER_REGION }} \
+            --project ${{ secrets.GCLOUD_PROJECT_ID }}
 
-      # Log in to Docker Hub
-      - name: Log in to Docker Hub
-        run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-
-      # Push Docker images to Docker Hub   (add usernameeeee)
-      - name: Push Docker images
+      - name: Deploy Updated Services to GKE
         run: |
-          docker push /frontend
-          docker push /auth-service
-          docker push /listing-service
-          docker push /search-service
-          docker push /api-gateway
-
-      # Deploy to Google Cloud 
-      - name: Deploy to Google Cloud
-        run: |
-          # FINISH WHEN GCLOUD IS SETUP
+          CHANGED_DIRS=$(git diff --name-only HEAD~1 HEAD | cut -d'/' -f2 | sort | uniq)
+          for dir in $CHANGED_DIRS; do
+            if [ "$dir" = "frontend" ] && [ -f k8s/frontend-deployment.yaml ]; then
+              kubectl apply -f k8s/frontend-deployment.yaml
+            fi
+            if [ "$dir" = "api-gateway" ] && [ -f k8s/api-gateway-deployment.yaml ]; then
+              kubectl apply -f k8s/api-gateway-deployment.yaml
+            fi
+            if [ "$dir" = "user-service" ] && [ -f k8s/user-service-deployment.yaml ]; then
+              kubectl apply -f k8s/user-service-deployment.yaml
+            fi
+            if [ "$dir" = "listing-service" ] && [ -f k8s/listing-service-deployment.yaml ]; then
+              kubectl apply -f k8s/listing-service-deployment.yaml
+            fi
+            if [ "$dir" = "search-service" ] && [ -f k8s/search-service-deployment.yaml ]; then
+              kubectl apply -f k8s/search-service-deployment.yaml
+            fi
+          done
