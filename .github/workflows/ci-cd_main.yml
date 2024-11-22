@@ -43,14 +43,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
 
       - name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCLOUD_AUTH_JSON }}
 
-      - name: Configure Docker to use Google Container Registry
+      - name: Configure Google cloud
         run: |
+          gcloud components install gke-gcloud-auth-plugin
           gcloud auth configure-docker
 
       - name: Build and Push Updated Docker Images
