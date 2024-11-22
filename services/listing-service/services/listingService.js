@@ -1,4 +1,4 @@
-const Listing = require('../models/listingModel');
+const Listing = require('../models/listing');
 
 exports.createListing = async (data, userId) => {
   const listing = new Listing({ ...data, userId });
@@ -7,13 +7,13 @@ exports.createListing = async (data, userId) => {
 };
 
 exports.getListingById = async (id) => {
-  const listing = await Listing.findById(id).populate('userId', 'username email'); // Populate user details
+  const listing = await Listing.findById(id);
   if (!listing) throw new Error('Listing not found');
   return listing;
 };
 
 exports.getAllListings = async () => {
-  return await Listing.find().populate('userId', 'username email'); // Populate user details
+  return await Listing.find();
 };
 
 exports.updateListing = async (id, data, userId) => {
