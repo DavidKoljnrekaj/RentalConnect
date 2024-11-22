@@ -1,18 +1,13 @@
-# Use Node.js LTS version as a base image
-FROM node:18
-
-# Set the working directory inside the container
+# Stage 1: Build
+FROM node:18-slim AS build
 WORKDIR /app
-
-# Copy package.json and install dependencies
 COPY package.json ./
 RUN npm install
-
-# Copy the rest of the application code
 COPY . .
 
-# Expose the port the service runs on
+# Stage 2: Production
+FROM node:18-alpine
+WORKDIR /app
+COPY --from=build /app .
 EXPOSE 3002
-
-# Command to run the service
 CMD ["node", "index.js"]
