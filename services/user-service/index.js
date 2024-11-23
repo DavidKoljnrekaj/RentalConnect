@@ -13,7 +13,7 @@ app.use(express.json());
 
 // Connect to MongoDB
 if (process.env.NODE_ENV !== 'test') {
-  mongoose.connect(process.env.MONGO_URI)
+  mongoose.connect(process.env.MONGO_URI || 'mongodb+srv://admin:ClbUJCmpRWGLTQBd@rentalconnectcluster.4kr7k.mongodb.net/?retryWrites=true&w=majority&appName=RentalConnectCluster')
     .then(() => console.log('Connected to MongoDB'))
     .catch((err) => console.error('Failed to connect to MongoDB', err));
 }
