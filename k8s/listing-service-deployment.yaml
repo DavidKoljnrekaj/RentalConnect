@@ -17,6 +17,7 @@ spec:
       containers:
       - name: listing-service
         image: europe-north1-docker.pkg.dev/rentalconnect/imagerepository/listing-service:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 3002
         env:
