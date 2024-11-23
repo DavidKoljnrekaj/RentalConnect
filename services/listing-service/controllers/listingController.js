@@ -30,8 +30,7 @@ exports.getAllListings = async (req, res) => {
 
 exports.updateListing = async (req, res) => {
   try {
-    const userId = req.user.id; // Extract userId from the token
-    const listing = await listingService.updateListing(req.params.id, req.body, userId);
+    const listing = await listingService.updateListing(req.params.id, req.body);
     res.json(listing);
   } catch (error) {
     res.status(404).json({ error: error.message });
@@ -40,8 +39,7 @@ exports.updateListing = async (req, res) => {
 
 exports.deleteListing = async (req, res) => {
   try {
-    const userId = req.user.id; // Extract userId from the token
-    const listing = await listingService.deleteListing(req.params.id, userId);
+    const listing = await listingService.deleteListing(req.params.id);
     res.json({ message: 'Listing deleted successfully', listing });
   } catch (error) {
     res.status(404).json({ error: error.message });

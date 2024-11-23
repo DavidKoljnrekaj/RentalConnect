@@ -16,14 +16,14 @@ exports.getAllListings = async () => {
   return await Listing.find();
 };
 
-exports.updateListing = async (id, data, userId) => {
-  const listing = await Listing.findOneAndUpdate({ _id: id, userId }, data, { new: true });
+exports.updateListing = async (id, data) => {
+  const listing = await Listing.findOneAndUpdate( { _id: id } , data, { new: true });
   if (!listing) throw new Error('Listing not found or unauthorized');
   return listing;
 };
 
-exports.deleteListing = async (id, userId) => {
-  const listing = await Listing.findOneAndDelete({ _id: id, userId });
+exports.deleteListing = async (id) => {
+  const listing = await Listing.findOneAndDelete({ _id: id});
   if (!listing) throw new Error('Listing not found or unauthorized');
   return listing;
 };
