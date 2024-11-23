@@ -1,13 +1,15 @@
-# Stage 1: Build
-FROM node:18-slim AS build
-WORKDIR /app
-COPY package.json ./
-RUN npm install
-COPY . .
+FROM node:alpine
 
-# Stage 2: Production
-FROM node:18-alpine
 WORKDIR /app
-COPY --from=build /app .
+
+# Only copy the package.json file to work directory
+COPY package.json .
+
+# Install all Packages
+RUN npm install && npm cache clean --force
+
+COPY . /app/
+
 EXPOSE 3002
+
 CMD ["node", "index.js"]
