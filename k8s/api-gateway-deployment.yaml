@@ -5,7 +5,7 @@ metadata:
   labels:
     app: api-gateway
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: api-gateway
@@ -19,6 +19,13 @@ spec:
         image: europe-north1-docker.pkg.dev/rentalconnect/imagerepository/api-gateway:latest
         ports:
         - containerPort: 8000
+        resources:
+          requests:
+            cpu: "300m"          # Request 0.3 vCPUs
+            memory: "256Mi"      # Request 256 MB memory
+          limits:
+            cpu: "500m"          # Limit 0.5 vCPUs
+            memory: "512Mi"      # Limit 512 MB memory        
 ---
 apiVersion: v1
 kind: Service
