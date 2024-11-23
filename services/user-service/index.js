@@ -18,7 +18,7 @@ if (process.env.NODE_ENV !== 'test') {
     .catch((err) => console.error('Failed to connect to MongoDB', err));
 }
 
-// Routes 
+// Routes
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 
