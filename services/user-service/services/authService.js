@@ -20,7 +20,11 @@ exports.authenticateUser = async (email, password) => {
   return token;
 };
 
-exports.verifyToken = (token) => {
-  if (!token) throw new Error('No token provided');
-  return jwt.verify(token, process.env.JWT_SECRET);
+exports.verifyToken = async (token) => {
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    return { id: decoded.id, role: decoded.role };
+  } catch (error) {
+    throw new Error('Invalid token');
+  }
 };
