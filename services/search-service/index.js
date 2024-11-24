@@ -1,5 +1,5 @@
 const express = require('express');
-const connectToDatabase = require('../../shared/config/dbConfig'); 
+//const connectToDatabase = require('../../shared/config/dbConfig'); 
 require('dotenv').config();
 
 const app = express();
@@ -8,20 +8,19 @@ const PORT = process.env.PORT || 3003;
 // Middleware
 app.use(express.json());
 
-// Connect to the Database
-connectToDatabase(/*process.env.MONGO_URI*/);
+if (process.env.NODE_ENV !== 'test') {
+  mongoose.connect(process.env.MONGO_URI || 'mongodb+srv://admin:ClbUJCmpRWGLTQBd@rentalconnectcluster.4kr7k.mongodb.net/?retryWrites=true&w=majority&appName=RentalConnectCluster')
+    .then(() => console.log('Connected to MongoDB'))
+    .catch((err) => console.error('Failed to connect to MongoDB', err));
+}
 
 // Routes
-app.get('/', (req, res) => {
-  res.send('Search Service is running');
-});
+app.use('/search', searchRoutes);
 
-
-app.get('/listings', (req, res) => {
-    //finish
-  res.json({ message: 'Listings fetched successfully' });
-});
-
-app.listen(PORT, () => {
-  console.log(`Search Service running on port ${PORT}`);
-});
+// Start the server
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => console.log(`Listing Service running on port ${PORT}`));
+}
+else {
+module.exports = app
+}
