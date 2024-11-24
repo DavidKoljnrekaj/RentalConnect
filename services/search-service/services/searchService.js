@@ -1,4 +1,4 @@
-const Listing = require('../../../shared/constants/models/listingModel'); 
+const Listing = require('../models/listing'); 
 
 // Get short listings with pagination and optional filters
 exports.getShortListings = async (filters = {}, page = 1, limit = 10) => {

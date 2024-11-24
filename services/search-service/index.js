@@ -1,6 +1,9 @@
 const express = require('express');
-//const connectToDatabase = require('../../shared/config/dbConfig'); 
+const mongoose = require('mongoose');
+//const connectToDatabase = require('../../shared/config/dbConfig');  IMPLEMENT LATER
 require('dotenv').config();
+
+const searchRoutes = require('./routes/searchRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3003;
