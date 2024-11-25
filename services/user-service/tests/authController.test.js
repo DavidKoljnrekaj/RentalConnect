@@ -2,6 +2,7 @@ const request = require('supertest');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const { MongoMemoryServer } = require('mongodb-memory-server');
+const jwt = require('jsonwebtoken');
 const app = require('../index'); // Import the app
 const User = require('../models/userModel');
 
@@ -23,25 +24,41 @@ afterEach(async () => {
 });
 
 describe('Auth Controller', () => {
-  it('should register a new user', async () => {
+  it('should register a new user with client role by default', async () => {
     const res = await request(app).post('/auth/register').send({
       username: 'testuser',
       email: 'test@example.com',
       password: 'password123',
-      phoneNumber: '12345678'
+      phoneNumber: '12345678',
     });
 
     expect(res.statusCode).toBe(201);
     expect(res.body.message).toBe('User registered successfully');
     expect(res.body.user).toHaveProperty('username', 'testuser');
+    expect(res.body.user).toHaveProperty('role', 'client');
   });
 
-  it('should login an existing user', async () => {
-    // Create a user directly in the database
+  it('should register a new user with admin role', async () => {
+    const res = await request(app).post('/auth/register').send({
+      username: 'adminuser',
+      email: 'admin@example.com',
+      password: 'adminpassword',
+      phoneNumber: '87654321',
+      role: 'admin',
+    });
+
+    expect(res.statusCode).toBe(201);
+    expect(res.body.message).toBe('User registered successfully');
+    expect(res.body.user).toHaveProperty('username', 'adminuser');
+    expect(res.body.user).toHaveProperty('role', 'admin');
+  });
+
+  it('should login an existing user and return a valid token', async () => {
     const user = new User({
       username: 'testuser',
       email: 'test@example.com',
       password: await bcrypt.hash('password123', 10),
+      role: 'client',
     });
     await user.save();
 
@@ -52,6 +69,10 @@ describe('Auth Controller', () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body).toHaveProperty('token');
+
+    const decoded = jwt.verify(res.body.token, process.env.JWT_SECRET);
+    expect(decoded).toHaveProperty('id', user._id.toString());
+    expect(decoded).toHaveProperty('role', 'client');
   });
 
   it('should not login with incorrect password', async () => {
@@ -59,6 +80,7 @@ describe('Auth Controller', () => {
       username: 'testuser',
       email: 'test@example.com',
       password: await bcrypt.hash('password123', 10),
+      role: 'client',
     });
     await user.save();
 
@@ -71,26 +93,47 @@ describe('Auth Controller', () => {
     expect(res.body.error).toBe('Invalid password');
   });
 
-  it('should verify a valid token', async () => {
+  it('should not login with non-existent email', async () => {
+    const res = await request(app).post('/auth/login').send({
+      email: 'nonexistent@example.com',
+      password: 'password123',
+    });
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body.error).toBe('User not found');
+  });
+
+  it('should authorize a valid token and return user details', async () => {
     const user = new User({
       username: 'testuser',
       email: 'test@example.com',
       password: await bcrypt.hash('password123', 10),
+      role: 'client',
     });
     await user.save();
 
-    const loginRes = await request(app).post('/auth/login').send({
-      email: 'test@example.com',
-      password: 'password123',
-    });
+    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    const token = loginRes.body.token;
+    const res = await request(app).get('/auth/authorize').set('Authorization', token);
 
-    const verifyRes = await request(app)
-      .get('/auth/verify')
-      .set('Authorization', token);
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveProperty('valid', true);
+    expect(res.body).toHaveProperty('id', user._id.toString());
+    expect(res.body).toHaveProperty('role', 'client');
+  });
 
-    expect(verifyRes.statusCode).toBe(200);
-    expect(verifyRes.body).toHaveProperty('userId');
+  it('should not authorize an invalid token', async () => {
+    const res = await request(app).get('/auth/authorize').set('Authorization', 'invalidtoken');
+
+    expect(res.statusCode).toBe(401);
+    expect(res.body.valid).toBe(false);
+    expect(res.body.error).toBe('Invalid token');
+  });
+
+  it('should not authorize without a token', async () => {
+    const res = await request(app).get('/auth/authorize');
+
+    expect(res.statusCode).toBe(401);
+    expect(res.body.error).toBe('Access denied');
   });
 });
