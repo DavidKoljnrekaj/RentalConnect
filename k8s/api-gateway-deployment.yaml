@@ -19,6 +19,13 @@ spec:
         image: europe-north1-docker.pkg.dev/rentalconnect/imagerepository/api-gateway:latest
         ports:
         - containerPort: 8000
+        env:
+        - name: USER_SERVICE_URL
+          value: "http://35.228.66.43"
+        - name: LISTING_SERVICE_URL
+          value: "http://35.228.50.172"
+        - name: SEARCH_SERVICE_URL
+          value: "http://35.228.178.199/" 
         resources:
           requests:
             cpu: "300m"          # Request 0.3 vCPUs
