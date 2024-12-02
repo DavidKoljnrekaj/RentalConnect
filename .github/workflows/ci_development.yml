@@ -25,7 +25,7 @@ jobs:
             node-version: 16
   
         # Install dependencies and run tests for each service
-        - name: Install dependencies and run tests
+        - name: Install user service dependencies and run tests
           working-directory: ./services/user-service
           env: 
             JWT_SECRET: ${{ secrets.JWT_SECRET }}
@@ -33,13 +33,13 @@ jobs:
             npm install
             npm test 
   
-        - name: Install dependencies and run tests
+        - name: Install listing service dependencies and run tests
           working-directory: ./services/listing-service
           run: |
             npm install
             npm test
   
-        - name: Install dependencies and run tests
+        - name: Install search service dependencies and run tests
           working-directory: ./services/search-service
           run: |
             npm install
@@ -50,3 +50,10 @@ jobs:
           run: |
             npm install
             npm test
+
+        - name: Install api gateway dependencies and run tests
+          working-directory: ./services/api-gateway
+          run: |
+            npm install
+            npm test
+
