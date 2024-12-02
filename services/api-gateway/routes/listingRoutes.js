@@ -4,6 +4,8 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
+const route = process.env.LISTING_SERVICE_URL || 'http://localhost:3002'
+
 // Admin-only route to delete listings  (example role limited endpoint)
 router.delete('/:id', authMiddleware, (req, res, next) => {
   if (req.user.role !== 'admin') {
@@ -16,8 +18,9 @@ router.delete('/:id', authMiddleware, (req, res, next) => {
 router.use(
   '/',
   createProxyMiddleware({
-    target: process.env.LISTING_SERVICE_URL,
+    target: route,
     changeOrigin: true,
+    pathRewrite: { '^/': '/listings' },
   })
 );
 
