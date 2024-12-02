@@ -4,12 +4,14 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
+const route = process.env.USER_SERVICE_URL || 'http://localhost:3003'
+
 // Allow clients and admins to access search
 router.use(
   '/',
   authMiddleware,
   createProxyMiddleware({
-    target: process.env.SEARCH_SERVICE_URL,
+    target: route,
     changeOrigin: true,
   })
 );

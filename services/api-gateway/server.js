@@ -6,13 +6,14 @@ const searchRoutes = require('./routes/searchRoutes');
 module.exports = () => {
   const app = express();
 
-  // Middleware for parsing JSON
-  app.use(express.json());
-
   // Mount routes
   app.use('/users', userRoutes);
   app.use('/listings', listingRoutes);
   app.use('/search', searchRoutes);
+
+  // Middleware for parsing JSON
+  app.use(express.json());
+
 
   // Default error handling
   app.use((err, req, res, next) => {

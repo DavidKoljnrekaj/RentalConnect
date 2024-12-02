@@ -4,13 +4,16 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
+const route = process.env.SEARCH_SERVICE_URL || 'http://localhost:3001'
+
 // Proxy /auth routes under /users/auth
 router.use(
     '/auth',
     createProxyMiddleware({
-      target: process.env.USER_SERVICE_URL,
+      target: route,
       changeOrigin: true,
-      pathRewrite: { '^/users/auth': '/auth' }, // Rewrite /users/auth to /auth for User Service
+      logLevel: 'debug',
+      pathRewrite: { '^/': '/auth/' },
     })
   );
   
@@ -18,8 +21,10 @@ router.use(
   router.use(
     '/',
     createProxyMiddleware({
-      target: process.env.USER_SERVICE_URL,
+      target: route,
       changeOrigin: true,
+      logLevel: 'debug',
+      pathRewrite: { '^/': '/users' },
     })
   );
 
