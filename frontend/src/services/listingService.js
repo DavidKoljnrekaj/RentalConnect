@@ -1,4 +1,5 @@
 import httpClient from './httpClient';
+import kitchenImage from '../assets/images/kitchen.jpg';
 
 const ListingService = {
   /**
@@ -111,6 +112,56 @@ const ListingService = {
       },
     ];
   },
+
+
+getListings: async (filters = {}) => {
+  /**
+  try {
+    const response = await httpClient.get('/listings', { params: filters });
+    return response.data;
+  } catch (error) {
+    console.error('Error in ListingService.getListings:', error);
+    throw error.response ? error.response.data : error;
+  }
+  */
+  // Dummy data for testing
+  const dummyListings = [
+    {
+      id: '1',
+      title: 'Cozy Studio in Downtown',
+      image: kitchenImage,
+      price: { monthlyRent: 800 },
+    },
+    {
+      id: '2',
+      title: 'Modern Apartment',
+      image: kitchenImage,
+      price: { monthlyRent: 1200 },
+    },
+    {
+      id: '3',
+      title: 'Spacious House',
+      image: kitchenImage,
+      price: { monthlyRent: 1500 },
+    },
+    {
+      id: '4',
+      title: 'Affordable Flat',
+      image: kitchenImage,
+      price: { monthlyRent: 600 },
+    },
+  ];
+
+  // Apply filters (dummy implementation)
+  if (filters.title) {
+    return dummyListings.filter((listing) =>
+      listing.title.toLowerCase().includes(filters.title.toLowerCase())
+    );
+  }
+
+  return dummyListings;
+}
 };
+
 
 export default ListingService;
