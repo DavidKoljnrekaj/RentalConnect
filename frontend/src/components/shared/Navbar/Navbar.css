@@ -1,0 +1,92 @@
+/* Navbar container */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 3rem; /* Increased padding for a larger navbar */
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+    font-size: 1.2rem; /* Increased the base font size */
+    font-weight: 150;
+    min-height: 38px;
+  }
+  
+  /* Logo */
+  .navbar-logo a {
+    font-size: 1.5rem; /* Bigger logo text */
+    padding: 45%;
+    text-decoration: none;
+    color: black;
+  }
+  
+  /* Right-side container */
+  .navbar-right {
+    margin: 0 4%;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Links */
+  .navbar-links {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .navbar-links li {
+    margin: 0 1.5rem; /* Increased spacing between links */
+  }
+  
+  .navbar-links a {
+    text-decoration: none;
+    color: #555;
+    font-weight: bold;
+    font-size: 0.8rem; /* Bigger link text */
+    transition: color 0.3s ease;
+  }
+  
+  .navbar-links a:hover {
+    color: black;
+  }
+  
+  /* Auth Buttons */
+  .navbar-auth {
+    margin-left: 1.3rem; /* Increased spacing between links and auth buttons */
+  }
+  
+  .login-button,
+  .navbar-profile {
+    background-color: #007bff;
+    color: white;
+    padding: 0.7rem 1.2rem; /* Increased padding for larger buttons */
+    border-radius: 8px; /* Slightly rounded corners */  
+    text-decoration: none;
+    font-size: 1rem; /* Bigger button text */
+    transition: background-color 0.3s ease;
+  }
+  
+  .login-button:hover,
+  .navbar-profile:hover {
+    background-color: #0056b3;
+  }
+  
+  .logout-button {
+    background: none;
+    border: none;
+    color: #555;
+    font-weight: bold;
+    margin-left: 1.5rem;
+    cursor: pointer;
+    font-size: 1.2rem; /* Bigger logout button text */
+    transition: color 0.3s ease;
+  }
+  
+  .logout-button:hover {
+    color: black;
+  }
+  

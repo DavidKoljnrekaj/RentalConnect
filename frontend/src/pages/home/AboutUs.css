@@ -1,0 +1,73 @@
+.about-us {
+    padding: 4rem 1rem;
+    text-align: center;
+    background-color: #f8f9fa; /* Light background color */
+    color: #333; /* Default text color */
+  }
+  
+  .about-us h2 {
+    font-size: 2.5rem;
+    font-weight: lighter;
+    color: #007bff; /* Blue heading */
+    margin-bottom: 1.5rem;
+  }
+  
+  .about-description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 3rem;
+    color: #666; /* Subtle gray */
+    max-width: 30%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .team-container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap; /* Ensures responsiveness */
+  }
+  
+  .team-member {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 2%;
+    width: 400px; /* Adjust width */
+  }
+  
+  .team-photo {
+    width: 100%;
+    margin-bottom: 1rem;
+    object-fit: cover;
+  }
+  
+  .team-member h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  .team-member p {
+    font-size: 1rem;
+    color: #777; /* Muted text for role */
+  }
+  
+  /* Adjustments for Mobile */
+  @media (max-width: 768px) {
+    .team-container {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+  
+    .team-member {
+      width: 100%;
+      max-width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+  
