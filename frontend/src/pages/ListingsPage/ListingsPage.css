@@ -1,0 +1,81 @@
+.listings-page {
+    padding: 2rem;
+  }
+  
+/* Listings grid */
+.listings-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  width: 100%;
+  padding: 1rem;
+}
+
+
+
+/* Filter panel styles */
+.filter-panel {
+  top: 0;
+  position: fixed;
+  left: -25%; /* Initially hidden outside the viewport */
+  width: 25%;
+  height: 100%;
+  background: white;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: left 0.3s ease; /* Smooth transition */
+}
+
+.filter-panel.open {
+  left: 0;
+}
+
+/* Close button */
+.filter-panel .close-button {
+  align-self: flex-end;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 1rem;
+}
+
+/* Filter content */
+.filter-panel .filter-content h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.filter-panel .apply-button,
+.filter-panel .clear-button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.filter-panel .apply-button {
+  margin-bottom: 0.5rem;
+}
+
+.filter-panel .apply-button:hover {
+  background-color: #218838;
+}
+
+.filter-panel .clear-button {
+  margin-bottom: 0.5rem;
+}
+
+.filter-panel .clear-button:hover {
+  background-color: #c82333;
+}
+
+.listings-number {
+  margin-left: 6%;
+  font-size: larger;
+  font-weight: 100;
+}

@@ -1,0 +1,115 @@
+/* Overall Section Styles */
+.why-choose-us {
+    background-color: #f9f9f9; /* Light background */
+    padding: 2.5rem 2.5rem;
+    text-align: center;
+    font-family: 'Roboto', sans-serif; /* Cleaner, modern font */
+  }
+
+
+  /* Intro Text (Heading and Paragraph) */
+  .intro-text h2 {
+    font-size: 2.3rem; /* Match example */
+    font-weight: lighter; /* Slightly less bold */
+    color: #007bff; /* Vibrant blue for the title */
+    margin-bottom: 1rem;
+  }
+  
+  .intro-text p {
+    max-width: 32%; /* Limit the width of the text */
+    margin: 0 auto; /* Center the text horizontally */
+    text-align: center; /* Ensure text stays centered */
+    font-size: 1.2rem; /* Lighter and smaller */
+    font-weight: lighter; /* Normal font weight for readability */
+    margin-bottom: 2rem;
+    color: #777; /* Subtle gray for text */
+  }
+  
+  /* Flexbox for Image and Content */
+  .why-choose-us-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap; /* Allows wrapping on smaller screens */
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Image container */
+  .image-container {
+    flex: 1.2;
+    max-width: 700px; /* Adjust width */
+  }
+  
+  .image-container img {
+    width: 100%;
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  }
+  
+  /* Content container */
+  .content-container {
+    flex: 1.2;
+    text-align: left;
+    max-width: 700px;
+  }
+  
+  .content-container h3 {
+    font-size: 1.8rem; /* Larger subtitle */
+    font-weight: lighter; 
+    color: #007bff; /* Darker gray for headers */
+    margin-bottom: 2rem;
+  }
+  
+  .content-container ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .content-container ul li {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    font-weight: 400; /* Normal weight for list items */
+    color: #555; /* Lighter gray */
+  }
+  
+  .content-container ul li strong {
+    font-weight: 600; /* Slightly bolder for emphasis */
+    color: #333; /* Highlight key points in blue */
+  }
+  
+  .contact-us-button {
+    display: inline-block;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 0.7rem 1.2rem;
+    font-size: 1.5rem;
+    font-weight: 50; /* Slightly bold */
+    color: #007bff;
+    background-color: transparent;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .contact-us-button:hover {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .why-choose-us-container {
+      flex-direction: column;
+    }
+  
+    .image-container,
+    .content-container {
+      max-width: 100%;
+      text-align: center;
+    }
+  }
+  
