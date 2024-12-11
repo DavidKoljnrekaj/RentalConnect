@@ -1,0 +1,16 @@
+.map-page {
+    padding: 20px;
+  }
+  
+  .map-page h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .map-container {
+    height: 80vh;
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
