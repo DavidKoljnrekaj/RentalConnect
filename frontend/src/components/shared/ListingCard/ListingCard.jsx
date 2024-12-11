@@ -8,10 +8,11 @@ const ListingCard = ({ listing }) => {
   const handleCardClick = () => {
     navigate(`/listing/${listing._id}`); // Redirect to the listing details page
   };
+  const defaultImage = "../../../assets/images/kitchen.jpg";
 
   return (
     <div className="listing-card" onClick={handleCardClick}>
-      <img src={listing.image} alt={listing.title} />
+      <img src={listing.image || defaultImage} alt={listing.title} />
       <div className="listing-card-details">
         <h4>{listing.title}</h4>
         <p>${listing.price.monthlyRent}/month</p>
