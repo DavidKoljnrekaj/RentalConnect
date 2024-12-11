@@ -8,7 +8,6 @@ const ListingService = {
    * @returns {Promise<object>} - The listing data
    */
   getListingById: async (id) => {
-    // Uncomment the following code to use the real implementation
     /*
     try {
       const response = await httpClient.get(`/listings/${id}`); // API Gateway route for listings
@@ -16,8 +15,8 @@ const ListingService = {
     } catch (error) {
       console.error('Error in ListingService.getListingById:', error);
       throw error.response ? error.response.data : error;
-    }
-    */
+    }*/
+    
     // Dummy listing data for testing
     return {
       _id: id,
@@ -89,25 +88,25 @@ const ListingService = {
       {
         id: '1',
         title: 'Cozy Studio in Downtown',
-        image: 'https://via.placeholder.com/500x300?text=Studio',
+        image: kitchenImage,
         price: { monthlyRent: 800 },
       },
       {
         id: '2',
         title: 'Modern Apartment',
-        image: 'https://via.placeholder.com/500x300?text=Modern+Apartment',
+        image: kitchenImage,
         price: { monthlyRent: 1200 },
       },
       {
         id: '3',
         title: 'Spacious House',
-        image: 'https://via.placeholder.com/500x300?text=Spacious+House',
+        image: kitchenImage,
         price: { monthlyRent: 1500 },
       },
       {
         id: '4',
         title: 'Affordable Flat',
-        image: 'https://via.placeholder.com/500x300?text=Affordable+Flat',
+        image: kitchenImage,
         price: { monthlyRent: 600 },
       },
     ];
@@ -115,17 +114,17 @@ const ListingService = {
 
 
 getListings: async (filters = {}) => {
-  /**
+  
   try {
-    const response = await httpClient.get('/listings', { params: filters });
+    const response = await httpClient.get('/search/short-listings', { params: filters });
     return response.data;
   } catch (error) {
     console.error('Error in ListingService.getListings:', error);
     throw error.response ? error.response.data : error;
   }
-  */
+ 
   // Dummy data for testing
-  const dummyListings = [
+  /**const dummyListings = [
     {
       id: '1',
       title: 'Cozy Studio in Downtown',
@@ -159,9 +158,33 @@ getListings: async (filters = {}) => {
     );
   }
 
-  return dummyListings;
-}
+  return dummyListings;*/
+},
+
+addListing: async (listingData) => {
+  try {
+    const response = await httpClient.post('/listings', listingData);
+    return response.data;
+  } catch (error) {
+    console.error('Error adding listing:', error);
+    throw error.response ? error.response.data : error;
+  }
+},
+
+getMapListings: async () => {
+  try {
+    const response = await httpClient.get('/search/map-listings');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching map listings:', error);
+    throw error.response ? error.response.data : error;
+  }
+},
+
+
 };
+
+
 
 
 export default ListingService;

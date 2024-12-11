@@ -22,7 +22,7 @@ exports.login = async (req, res) => {
 };
 
 exports.authorize = async (req, res) => {
-  const token = req.header('Authorization');
+  const token = req.header('Authorization').replace(/^Bearer\s*/, "");;
   if (!token) return res.status(401).json({ error: 'Access denied' });
 
   try {

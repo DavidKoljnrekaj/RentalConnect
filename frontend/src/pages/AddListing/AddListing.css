@@ -1,0 +1,97 @@
+.add-listing-container {
+    margin: 0 8%;
+    padding: 2rem;
+  }
+  
+  .add-listing-container h2 {
+    font-size:xx-large;
+    text-align: center;
+    font-weight: 150;
+    margin-bottom: 2rem;
+  }
+
+  .add-listing-container h3 {
+    font-size:x-large;
+    font-weight: 150;
+  }
+  
+  .add-listing-form label {
+    display: block;
+    font-weight: 100;
+    margin-bottom: 0.5rem;
+  }
+  
+  .add-listing-form input,
+.add-listing-form select,
+.add-listing-form textarea {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.add-listing-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.add-listing-form .form-group.inline {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.add-listing-form .form-group.inline label {
+  width: auto;
+  margin-bottom: 0;
+}
+
+.add-listing-form .form-group.inline input[type="checkbox"] {
+    width: auto; /* Prevents checkbox from stretching */
+    margin: 0; /* Resets default margins */
+    align-self: center; /* Ensures proper alignment */
+  }
+
+.add-listing-form .form-group.inline input,
+.add-listing-form .form-group.inline select {
+  flex: 1;
+}
+
+.add-listing-form .form-group.inline input {
+  margin-bottom: 0; /* Prevent extra margin for inline fields */
+}
+
+.add-listing-form button {
+  width: 100%;
+  padding: 1rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-listing-form button:hover {
+  background-color: #0056b3;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: -0.5rem;
+}
+
+label.checkbox {
+	display: flex;
+	align-items: center;
+	justify-content: left;
+    gap: 4px;
+}
+
+label.checkbox > input {
+	outline: none;
+	height: 20px;
+	border-radius: 5px;
+}
