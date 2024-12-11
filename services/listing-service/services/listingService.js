@@ -1,7 +1,7 @@
 const Listing = require('../models/listing');
 
 exports.createListing = async (data, userId) => {
-  const listing = new Listing({ ...data, userId });
+  const listing = new Listing({ ...data});
   await listing.save();
   return listing;
 };

@@ -2,6 +2,8 @@ const listingService = require('../services/listingService');
 
 exports.createListing = async (req, res) => {
   try {
+    console.log(req.user);
+    console.log(req.body);
     const userId = req.user?.id || req.body.createdBy; // Extract userId from the token (middleware should set `req.user`)
     const listing = await listingService.createListing(req.body, userId);
     res.status(201).json(listing);
