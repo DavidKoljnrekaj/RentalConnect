@@ -27,10 +27,10 @@ const Register = ({ onClose, onSwitch }) => {
       return;
     }
     try {
-      const { username, email, password } = formData; // Exclude unnecessary fields
+      const { username, email, password } = formData; // Exclude unnecessary fields for now
       const response = await authService.register({ username, email, password });
       console.log('Registration successful:', response.data);
-      onClose(); // Close the modal after successful registration
+      onSwitch(); // Switch to the login modal after registration
     } catch (err) {
       console.error('Registration error:', err);
       setError(err.response?.data?.message || 'Registration failed');
