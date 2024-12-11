@@ -54,6 +54,7 @@ jobs:
 
       - name: Build and Push Updated Docker Images
         run: |
+          echo "Changed directories: $CHANGED_DIRS"
           CHANGED_DIRS=$(git diff --name-only HEAD~1 HEAD | cut -d'/' -f2 | sort | uniq)
           for dir in $CHANGED_DIRS; do
             if [ "$dir" = "frontend" ]; then
