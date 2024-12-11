@@ -6,7 +6,7 @@ const router = express.Router();
 
 const route = process.env.LISTING_SERVICE_URL || 'http://localhost:3002'
 
-// Admin-only route to delete listings  (example role limited endpoint)
+// Admin-only route to delete listings  
 router.delete('/:id', authMiddleware, (req, res, next) => {
   if (req.user.role !== 'admin') {
     return res.status(403).json({ error: 'Access forbidden: Admins only' });

@@ -4,7 +4,7 @@ import authService from '../../services/authService';
 import { AuthContext } from '../../context/AuthContext';
 
 const Login = ({ onClose, onSwitch }) => {
-  const [formData, setFormData] = useState({ username: '', password: '' });
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const { login } = useContext(AuthContext); // Access login function from AuthContext
 
@@ -37,9 +37,9 @@ const Login = ({ onClose, onSwitch }) => {
         <form onSubmit={handleLogin}>
           <input
             type="text"
-            name="username"
-            placeholder="Username"
-            value={formData.username}
+            name="email"
+            placeholder="Email"
+            value={formData.email}
             onChange={handleInputChange}
             required
           />
