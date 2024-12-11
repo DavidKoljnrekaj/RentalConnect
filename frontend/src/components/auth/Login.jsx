@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import './Auth.css';
 import authService from '../../services/authService';
+import { AuthContext } from '../../context/AuthContext';
 
 const Login = ({ onClose, onSwitch }) => {
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
+  const { login } = useContext(AuthContext); // Access login function from AuthContext
 
   const handleInputChange = (e) => {
     setFormData({
@@ -16,7 +18,7 @@ const Login = ({ onClose, onSwitch }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await authService.login(formData);
+      const response = await authService.login(formData, login);
       console.log('Login successful:', response.data);
       onClose(); // Close the modal after successful login
     } catch (err) {
