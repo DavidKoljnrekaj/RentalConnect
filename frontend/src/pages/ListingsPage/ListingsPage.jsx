@@ -7,13 +7,14 @@ import './ListingsPage.css';
 const ListingsPage = () => {
   const [listings, setListings] = useState([]);
   const [filterPanelOpen, setFilterPanelOpen] = useState(false);
-  const [numberOfListings] = useState(0);
+  const [numberOfListings, setNumberOfListings] = useState(0);
 
 
   const fetchListings = async (filters = {}) => {
     try {
       const data = await ListingService.getListings(filters);
-      setListings(data);
+      setListings(data.listings);
+      setNumberOfListings(data.total)
     } catch (error) {
       console.error('Error fetching listings:', error);
     }

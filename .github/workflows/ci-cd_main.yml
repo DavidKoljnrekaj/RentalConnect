@@ -54,8 +54,7 @@ jobs:
 
       - name: Build and Push Updated Docker Images
         run: |
-          echo "Changed directories: $CHANGED_DIRS"
-          CHANGED_DIRS=$(git diff --name-only HEAD~1 HEAD | cut -d'/' -f2 | sort | uniq)
+          CHANGED_DIRS=$(git diff --name-only HEAD~1 HEAD | grep -oE '^(frontend|services/[^/]+)' | cut -d'/' -f1 | sort | uniq)
           for dir in $CHANGED_DIRS; do
             if [ "$dir" = "frontend" ]; then
               docker build -t europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/frontend ./frontend
@@ -108,7 +107,7 @@ jobs:
 
       - name: Deploy Updated Services to GKE
         run: |
-          CHANGED_DIRS=$(git diff --name-only HEAD~1 HEAD | cut -d'/' -f2 | sort | uniq)
+          CHANGED_DIRS=$(git diff --name-only HEAD~1 HEAD | grep -oE '^(frontend|services/[^/]+)' | cut -d'/' -f1 | sort | uniq)
           for dir in $CHANGED_DIRS; do
             if [ "$dir" = "frontend" ] && [ -f k8s/frontend-deployment.yaml ]; then
               kubectl apply -f k8s/frontend-deployment.yaml
