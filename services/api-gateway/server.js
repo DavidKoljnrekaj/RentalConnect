@@ -2,9 +2,12 @@ const express = require('express');
 const userRoutes = require('./routes/userRoutes');
 const listingRoutes = require('./routes/listingRoutes');
 const searchRoutes = require('./routes/searchRoutes');
+const cors = require('cors');
 
 module.exports = () => {
   const app = express();
+
+  app.use(cors());
 
   // Mount routes
   app.use('/users', userRoutes);

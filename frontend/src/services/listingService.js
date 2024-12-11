@@ -115,7 +115,7 @@ const ListingService = {
 
 
 getListings: async (filters = {}) => {
-  /**
+  
   try {
     const response = await httpClient.get('/listings', { params: filters });
     return response.data;
@@ -123,9 +123,9 @@ getListings: async (filters = {}) => {
     console.error('Error in ListingService.getListings:', error);
     throw error.response ? error.response.data : error;
   }
-  */
+ 
   // Dummy data for testing
-  const dummyListings = [
+  /**const dummyListings = [
     {
       id: '1',
       title: 'Cozy Studio in Downtown',
@@ -159,8 +159,8 @@ getListings: async (filters = {}) => {
     );
   }
 
-  return dummyListings;
-}
+  return dummyListings;*/
+} 
 };
 
 
