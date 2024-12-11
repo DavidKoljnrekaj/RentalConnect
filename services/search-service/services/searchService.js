@@ -25,3 +25,20 @@ exports.getShortListings = async (filters = {}, page = 1, limit = 10) => {
 
   return { listings, total };
 };
+
+exports.getMapListings = async () => {
+  try {
+    const listings = await Listing.find({}, 'title price.monthlyRent location.coordinates');
+    return listings.map((listing) => ({
+      id: listing._id,
+      title: listing.title,
+      price: listing.price.monthlyRent,
+      lat: listing.location.coordinates.lat,
+      lng: listing.location.coordinates.lng,
+    }));
+  } catch (error) {
+    console.error('Error fetching map listings:', error);
+    throw new Error('Failed to fetch map listings');
+  }
+};
+

@@ -9,7 +9,7 @@ const Listing = () => {
   const { id } = useParams();
   const [listing, setListing] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
+  const [showAdditionalDetails, setShowAdditionalDetails] = useState(false);
   
   useEffect(() => {
     const fetchListing = async () => {
@@ -72,6 +72,37 @@ const Listing = () => {
         <p>Room Number: {listing.propertyDetails.bedrooms}</p>
         <p>Bathroom Number: {listing.propertyDetails.bathrooms}</p>
       </div>
+      </div>
+      <button
+        className="toggle-details-button"
+        onClick={() => setShowAdditionalDetails(!showAdditionalDetails)}
+      >
+        {showAdditionalDetails ? 'Hide Additional Details' : 'Show Additional Details'}
+      </button>
+      <div
+        className={`additional-details-container ${
+          showAdditionalDetails ? 'open' : ''
+        }`}
+      >
+        <div className="additional-details">
+          <h3>Additional Details</h3>
+          <p>Pets Allowed: {listing.propertyDetails.petsAllowed ? 'Yes' : 'No'}</p>
+          <p>Available From: {new Date(listing.availability.availableFrom).toLocaleDateString()}</p>
+          <p>Lease Duration: {listing.availability.leaseDuration}</p>
+          <p>Contact Name: {listing.contact.name}</p>
+          <p>Contact Phone: {listing.contact.phone}</p>
+          <p>Contact Email: {listing.contact.email}</p>
+          {listing.location.state && <p>State: {listing.location.state}</p>}
+          {listing.location.postalCode && <p>Postal Code: {listing.location.postalCode}</p>}
+          {listing.location.coordinates.lat && listing.location.coordinates.lng && (
+            <p>
+              Coordinates: Lat {listing.location.coordinates.lat}, Lng {listing.location.coordinates.lng}
+            </p>
+          )}
+          {listing.utilities.details && (
+            <p>Included Utilities: {listing.utilities.details.join(', ')}</p>
+          )}
+        </div>
       </div>
       <RelatedProjects currentListingId={id} />
     </div>

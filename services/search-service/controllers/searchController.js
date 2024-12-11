@@ -25,3 +25,13 @@ exports.getShortListings = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+
+exports.getMapListings = async (req, res) => {
+  try {
+    const listings = await searchService.getMapListings();
+    res.json(listings);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
