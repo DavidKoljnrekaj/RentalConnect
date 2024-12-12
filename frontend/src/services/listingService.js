@@ -183,7 +183,7 @@ getMapListings: async () => {
 
 getFavoritedListings: async () => {
   try {
-    const response = await httpClient.get('/users/favorites');
+    const response = await httpClient.get('/listings/favorites');
     return response.data;
   } catch (error) {
     console.error('Error fetching map listings:', error);

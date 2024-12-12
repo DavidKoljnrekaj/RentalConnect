@@ -26,8 +26,6 @@ exports.authenticateUser = async (email, password) => {
 
 exports.verifyToken = async (token) => {
   try {
-    console.log(process.env.JWT_SECRET);
-    console.log(token);
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     return { id: decoded.id, role: decoded.role };
   } catch (error) {

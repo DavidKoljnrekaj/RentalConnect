@@ -39,8 +39,9 @@ exports.getMapListings = async (req, res) => {
 
 exports.getShortListingsByIds = async (req, res) => {
   try {
-    const listingIds = req.body.ids;
-    const listings = await searchService.getShortListings(listingIds);
+    const listingIds = req.body.listingIds;
+    const listings = await searchService.getShortListingsByIds(listingIds);
+    console.log(listings)
     res.status(200).json(listings);
   } catch (error) {
     res.status(400).json({ error: error.message });

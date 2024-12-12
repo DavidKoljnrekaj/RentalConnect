@@ -9,7 +9,9 @@ const httpClient = axios.create({
 
 // Attach access token to requests
 httpClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('accessToken');
+  const user = localStorage.getItem('user');
+  console.log(JSON.parse(user).token)
+  const token = JSON.parse(user).token
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
