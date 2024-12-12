@@ -7,6 +7,7 @@ import Listing from './pages/Listing/Listing';
 import ListingsPage from './pages/ListingsPage/ListingsPage'
 import AddListing from './pages/AddListing/AddListing';
 import MapPage from './pages/MapPage/MapPage';
+import ProfilePage from './pages/Profile/ProfilePage';
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/listings" element={<ListingsPage />} />
         <Route path="/add-listing" element={<AddListing />} />
         <Route path="/map" element={<MapPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </Router>
   );

@@ -1,6 +1,8 @@
 const express = require('express');
 const { createProxyMiddleware , fixRequestBody } = require('http-proxy-middleware');
 const authMiddleware = require('../middleware/authMiddleware');
+const UserService = require('../services/UserService');
+const ListingService = require('../services/ListingService'); 
 
 const router = express.Router();
 
@@ -10,11 +12,20 @@ router.post('/', authMiddleware, (req, res, next) => {
   if (!req.user || !req.user.id) {
     return res.status(401).json({ error: 'User ID not found in token' });
   }
-  console.log(req.body) //RETURNS UNDEFINED
   req.body = { ...req.body, createdBy: req.user.id };
   next();
 });
 
+// Fetch favorited listings
+router.get('/favorites', authMiddleware, async (req, res) => {
+  try {
+    const favorites = await UserService.getFavorites(req.user.id);
+    const listings = await ListingService.getShortListings(favorites);
+    res.status(200).json(listings);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Admin-only route to delete listings  
 router.delete('/:id', authMiddleware, (req, res, next) => {

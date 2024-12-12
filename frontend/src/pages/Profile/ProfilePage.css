@@ -1,0 +1,7 @@
+.listings-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    width: 100%;
+    padding: 1rem;
+  }

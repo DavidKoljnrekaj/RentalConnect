@@ -42,3 +42,11 @@ exports.getMapListings = async () => {
   }
 };
 
+exports.getShortListingsByIds = async (listingIds) => {
+  console.log(listingIds)
+    const listings = await Listing.find(
+      { _id: { $in: listingIds } },
+      { title: 1, price: 1, images: { $slice: 1 } } // Return only necessary fields
+    );
+    return listings
+};
