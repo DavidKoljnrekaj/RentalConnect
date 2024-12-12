@@ -6,6 +6,24 @@ const router = express.Router();
 
 const route = process.env.USER_SERVICE_URL || 'http://localhost:3001'
 
+router.post("/favorites", authMiddleware, async (req, res, next) => {
+  if (!req.user || !req.user.id) {
+    return res.status(401).json({ error: 'User ID not found in token' });
+  }
+  req.body = { ...req.body, userId: req.user.id };
+  next();
+});
+
+// Remove favorite
+router.delete("/favorites", authMiddleware, async (req, res, next) => {
+  if (!req.user || !req.user.id) {
+    return res.status(401).json({ error: 'User ID not found in token' });
+  }
+  req.body = { ...req.body, userId: req.user.id };
+  next();
+});
+
+
 // Proxy /auth routes under /users/auth
 router.use(
     '/auth',
@@ -25,7 +43,7 @@ router.use(
     createProxyMiddleware({
       target: route,
       changeOrigin: true,
-      pathRewrite: { '^/': '/users' },
+      pathRewrite: { '^/': '/users/' },
       on: {
         proxyReq: fixRequestBody,
       },  
