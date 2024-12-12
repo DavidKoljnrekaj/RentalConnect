@@ -8,3 +8,25 @@ exports.getUserById = async (userId) => {
 exports.getAllUsers = async () => {
   return await User.find().select('-password');
 };
+
+exports.addFavorite = async (listingId, userId) => {
+  const user = await User.findById(userId);
+    if (!User.favorites.includes(listingId)) {
+      User.favorites.push(listingId);
+      await User.save();
+    }
+    return user.favorites
+};
+
+exports.removeFavorite = async (Id, userId) => {
+    const user = await User.findById(userId);
+    user.favorites = user.favorites.filter(
+      (listingId) => listingId !== Id
+    );
+    return user.favorites
+};
+
+exports.getFavorites = async (userId) => {
+    const user = await User.findById(userId);
+    return user.favorites
+};
