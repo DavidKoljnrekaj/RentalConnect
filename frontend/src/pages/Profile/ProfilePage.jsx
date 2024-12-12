@@ -9,8 +9,9 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
-        const listings = await ListingService.getFavoritedListings();
-        setFavoritedListings(listings);
+        const response = await ListingService.getFavoritedListings();
+        console.log('Favorited Listings:', response); // Debug log
+        setFavoritedListings(response);
       } catch (error) {
         console.error('Error fetching favorited listings:', error);
       }
@@ -26,9 +27,9 @@ const ProfilePage = () => {
         <h3>Favorited Listings</h3>
         <div className="listings-grid">
           {favoritedListings.map((listing) => (
-            <ListingCard key={listing.id} listing={listing} />
-          ))}
-        </div>
+          <ListingCard key={listing.id} listing={listing} />
+        ))}
+      </div>
       </div>
     </div>
   );

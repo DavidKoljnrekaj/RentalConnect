@@ -11,9 +11,9 @@ exports.getAllUsers = async () => {
 
 exports.addFavorite = async (listingId, userId) => {
   const user = await User.findById(userId);
-    if (!User.favorites.includes(listingId)) {
-      User.favorites.push(listingId);
-      await User.save();
+    if (!user.favorites.includes(listingId)) {
+      user.favorites.push(listingId);
+      await user.save();
     }
     return user.favorites
 };
