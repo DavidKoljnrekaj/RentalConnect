@@ -61,7 +61,6 @@ jobs:
               docker build --build-arg REACT_APP_API_URL="http://35.228.208.159" -t europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/frontend ./frontend
               docker push europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/frontend
             fi
-            fi
             if [ "$dir" = "api-gateway" ]; then
               docker build -t europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/api-gateway ./services/api-gateway
               docker push europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/api-gateway
