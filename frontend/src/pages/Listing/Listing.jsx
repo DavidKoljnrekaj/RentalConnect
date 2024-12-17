@@ -86,23 +86,30 @@ const Listing = () => {
       >
         <div className="additional-details">
           <h3>Additional Details</h3>
-          <p>Pets Allowed: {listing.propertyDetails.petsAllowed ? 'Yes' : 'No'}</p>
-          <p>Available From: {new Date(listing.availability.availableFrom).toLocaleDateString()}</p>
-          <p>Lease Duration: {listing.availability.leaseDuration}</p>
-          <p>Contact Name: {listing.contact.name}</p>
-          <p>Contact Phone: {listing.contact.phone}</p>
-          <p>Contact Email: {listing.contact.email}</p>
-          {listing.location.state && <p>State: {listing.location.state}</p>}
-          {listing.location.postalCode && <p>Postal Code: {listing.location.postalCode}</p>}
-          {listing.location.coordinates.lat && listing.location.coordinates.lng && (
+          <p>Pets Allowed: {listing.propertyDetails?.petsAllowed ? 'Yes' : 'No'}</p>
+          <p>Available From: {listing.availability?.availableFrom 
+            ? new Date(listing.availability.availableFrom).toLocaleDateString() 
+            : 'Not Available'}
+          </p>
+          <p>Lease Duration: {listing.availability?.leaseDuration || 'Not Specified'}</p>
+          <p>Contact Name: {listing.contact?.name || 'N/A'}</p>
+          <p>Contact Phone: {listing.contact?.phone || 'N/A'}</p>
+          <p>Contact Email: {listing.contact?.email || 'N/A'}</p>
+          
+          {listing.location?.state && <p>State: {listing.location.state}</p>}
+          {listing.location?.postalCode && <p>Postal Code: {listing.location.postalCode}</p>}
+          
+          {listing.location?.coordinates?.lat && listing.location?.coordinates?.lng && (
             <p>
               Coordinates: Lat {listing.location.coordinates.lat}, Lng {listing.location.coordinates.lng}
             </p>
           )}
-          {listing.utilities.details && (
+          
+          {listing.utilities?.details && Array.isArray(listing.utilities.details) && (
             <p>Included Utilities: {listing.utilities.details.join(', ')}</p>
           )}
         </div>
+
       </div>
       <RelatedProjects currentListingId={id} />
     </div>

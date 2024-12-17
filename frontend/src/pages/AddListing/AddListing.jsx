@@ -27,17 +27,13 @@ const AddListing = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    // Handle nested fields
+  
     if (name.includes("price.")) {
       const key = name.split(".")[1];
       setFormData({ ...formData, price: { ...formData.price, [key]: value } });
     } else if (name.includes("location.")) {
       const key = name.split(".")[1];
-      setFormData({
-        ...formData,
-        location: { ...formData.location, [key]: value },
-      });
+      setFormData({ ...formData, location: { ...formData.location, [key]: value } });
     } else if (name.includes("propertyDetails.")) {
       const key = name.split(".")[1];
       setFormData({
@@ -46,14 +42,18 @@ const AddListing = () => {
       });
     } else if (name.includes("utilities.")) {
       const key = name.split(".")[1];
-      setFormData({
-        ...formData,
-        utilities: { ...formData.utilities, [key]: value },
-      });
+      setFormData({ ...formData, utilities: { ...formData.utilities, [key]: value } });
+    } else if (name.includes("availability.")) {
+      const key = name.split(".")[1];
+      setFormData({ ...formData, availability: { ...formData.availability, [key]: value } });
+    } else if (name.includes("contact.")) {
+      const key = name.split(".")[1];
+      setFormData({ ...formData, contact: { ...formData.contact, [key]: value } });
     } else {
       setFormData({ ...formData, [name]: value });
     }
   };
+  
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
@@ -62,16 +62,36 @@ const AddListing = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
+    // Create a FormData object
+    const formDataToSend = new FormData();
+  
+    // Append images
+    formData.images.forEach((file) => {
+      formDataToSend.append('images', file);
+    });
+  
+    // Append the rest of the fields
+    Object.entries(formData).forEach(([key, value]) => {
+      if (typeof value === 'object' && !Array.isArray(value)) {
+        Object.entries(value).forEach(([nestedKey, nestedValue]) => {
+          formDataToSend.append(`${key}.${nestedKey}`, nestedValue);
+        });
+      } else if (key !== 'images') {
+        formDataToSend.append(key, value);
+      }
+    });
+  
     try {
-      const newListing = await ListingService.addListing(formData);
-      alert("Listing added successfully!");
+      const newListing = await ListingService.addListing(formDataToSend);
+      alert('Listing added successfully!');
       console.log(newListing);
     } catch (error) {
-      console.error("Error adding listing:", error);
-      alert("Failed to add listing.");
+      console.error('Error adding listing:', error);
+      alert('Failed to add listing.');
     }
   };
+  
 
   return (
     <div className="add-listing-container">
@@ -271,8 +291,14 @@ const AddListing = () => {
             name="utilities.details"
             value={formData.utilities.details}
             onChange={handleChange}
+            disabled={formData.utilities.included} 
+            placeholder={
+              !formData.utilities.included
+                ? "Provide utility details (e.g., water, electricity, price)"
+                : "Enable to provide details"
+            }
           />
-        </div>
+        </div>  
 
         <div className="form-group">
           <label>Images</label>

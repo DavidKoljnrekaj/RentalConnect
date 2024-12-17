@@ -19,7 +19,7 @@ const ListingsPage = () => {
     maxPrice: '',
   });
 
-  const PAGE_SIZE = 10; // Number of listings per page
+  const PAGE_SIZE = 12; // Number of listings per page
 
   // Dropdown and combobox options
   const propertyTypes = ['Apartment', 'House', 'Studio', 'Office'];

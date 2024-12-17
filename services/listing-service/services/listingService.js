@@ -1,10 +1,45 @@
 const Listing = require('../models/listing');
+const { Storage } = require('@google-cloud/storage');
+const path = require('path');
 
-exports.createListing = async (data, userId) => {
-  const listing = new Listing({ ...data});
+// Path to your service account key file
+const credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+
+
+
+// Initialize Google Cloud Storage with explicit credentials
+const storage = new Storage({
+  credentials: credentials
+});
+
+const bucketName = 'rentalconnect-bucket';
+
+exports.createListing = async (data, files, userId) => {
+  const uploadedImages = [];
+
+  // Upload images to Google Cloud Storage
+  if (files && files.length > 0) {
+    for (const file of files) {
+      const blob = storage.bucket(bucketName).file(`property-images/${Date.now()}-${file.originalname}`);
+      await blob.save(file.buffer, {
+        metadata: { contentType: file.mimetype },
+      });
+      uploadedImages.push(`https://storage.googleapis.com/${bucketName}/${blob.name}`);
+    }
+  }
+
+  // Merge uploaded image URLs with listing data
+  const listingData = {
+    ...data,
+    images: uploadedImages,
+    createdBy: userId,
+  };
+
+  const listing = new Listing(listingData);
   await listing.save();
   return listing;
 };
+
 
 exports.getListingById = async (id) => {
   const listing = await Listing.findById(id);

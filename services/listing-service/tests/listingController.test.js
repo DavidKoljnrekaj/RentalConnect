@@ -48,7 +48,7 @@ describe('Listing Service', () => {
       included: true,
       fixed: true,
       amount: 150,
-      details: ['water', 'electricity', 'internet'],
+      details: 'water, electricity, internet]',
     },
     images: ['https://example.com/image1.jpg', 'https://example.com/image2.jpg'],
     contact: {
@@ -64,7 +64,8 @@ describe('Listing Service', () => {
   };
 
   it('should create a new listing', async () => {
-    const res = await request(app).post('/listings').send(sampleListing);
+    const validObjectId = new mongoose.Types.ObjectId();
+    const res = await request(app).post('/listings').set('x-user-id', validObjectId.toString()).send(sampleListing);
 
     expect(res.statusCode).toBe(201);
     expect(res.body.title).toBe(sampleListing.title);

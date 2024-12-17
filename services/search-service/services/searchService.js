@@ -17,7 +17,13 @@ exports.getShortListings = async (filters = {}, page = 1, limit = 10) => {
     };
   }
 
-  const listings = await Listing.find(query, 'title price.monthlyRent images location.city propertyDetails.type')
+  const listings = await Listing.find(query, {
+    title: 1,
+    'price.monthlyRent': 1,
+    'images': { $slice: 1 }, // Return only the first image
+    'location.city': 1,
+    'propertyDetails.type': 1,
+  })
     .skip(skip)
     .limit(limit);
 

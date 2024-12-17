@@ -17,6 +17,7 @@ spec:
       containers:
       - name: search-service
         image: europe-north1-docker.pkg.dev/rentalconnect/imagerepository/search-service:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 3003
         env:
