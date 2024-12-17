@@ -163,13 +163,18 @@ getListings: async (filters = {}) => {
 
 addListing: async (listingData) => {
   try {
-    const response = await httpClient.post('/listings', listingData);
+    const response = await httpClient.post('/listings', listingData, {
+      headers: {
+        'Content-Type': 'multipart/form-data', // Optional; browser will set automatically
+      },
+    });
     return response.data;
   } catch (error) {
     console.error('Error adding listing:', error);
     throw error.response ? error.response.data : error;
   }
 },
+
 
 getMapListings: async () => {
   try {

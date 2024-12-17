@@ -62,16 +62,36 @@ const AddListing = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
+    // Create a FormData object
+    const formDataToSend = new FormData();
+  
+    // Append images
+    formData.images.forEach((file) => {
+      formDataToSend.append('images', file);
+    });
+  
+    // Append the rest of the fields
+    Object.entries(formData).forEach(([key, value]) => {
+      if (typeof value === 'object' && !Array.isArray(value)) {
+        Object.entries(value).forEach(([nestedKey, nestedValue]) => {
+          formDataToSend.append(`${key}.${nestedKey}`, nestedValue);
+        });
+      } else if (key !== 'images') {
+        formDataToSend.append(key, value);
+      }
+    });
+  
     try {
-      const newListing = await ListingService.addListing(formData);
-      alert("Listing added successfully!");
+      const newListing = await ListingService.addListing(formDataToSend);
+      alert('Listing added successfully!');
       console.log(newListing);
     } catch (error) {
-      console.error("Error adding listing:", error);
-      alert("Failed to add listing.");
+      console.error('Error adding listing:', error);
+      alert('Failed to add listing.');
     }
   };
+  
 
   return (
     <div className="add-listing-container">
