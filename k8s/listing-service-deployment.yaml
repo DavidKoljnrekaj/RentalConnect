@@ -26,6 +26,11 @@ spec:
             secretKeyRef:
               name: mongo-uri-secret
               key: MONGO_URI
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          valueFrom:
+            secretKeyRef:
+              name: gcp-service-account
+              key: service-account.json
         resources:
           requests:
             cpu: "300m"          # Request 0.3 vCPUs
