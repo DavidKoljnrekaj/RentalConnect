@@ -13,7 +13,7 @@ const listingSchema = new mongoose.Schema({
     state: { type: String, required: false }, // State/Province (optional, depending on country)
     postalCode: { type: String, required: false }, // Postal code (optional)
     coordinates: { 
-      lat: { type: Number, required: false }, // Latitude
+      lat: { type: Number, required: false }, // Latitude 
       lng: { type: Number, required: false }, // Longitude
     },
   },
