@@ -2,12 +2,12 @@ const listingService = require('../services/listingService');
 
 exports.createListing = async (req, res) => {
   try {
-    console.log(req.user);
-    console.log(req.body);
-    const userId = req.user?.id || req.body.createdBy; // Extract userId from the token (middleware should set `req.user`)
-    const listing = await listingService.createListing(req.body, userId);
+    const userId = req.user?.id || req.body.createdBy; // Get userId from token or body
+    const files = req.files || []; // Multer will attach files here
+    const listing = await listingService.createListing(req.body, files, userId);
     res.status(201).json(listing);
   } catch (error) {
+    console.error('Error creating listing:', error);
     res.status(400).json({ error: error.message });
   }
 };
