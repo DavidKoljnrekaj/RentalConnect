@@ -1,10 +1,13 @@
 # Stage 1: Build the React app
-FROM node:16-alpine AS build
+FROM node:20-alpine AS build
 WORKDIR /app
 
 # Install dependencies
 COPY package.json package-lock.json ./
 RUN npm install 
+
+# Clean up previous builds
+RUN rm -rf build
 
 # Copy application source code and build the app
 COPY . .
