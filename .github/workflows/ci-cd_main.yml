@@ -13,6 +13,7 @@ jobs:
     env: 
       MONGO_URI: ${{ secrets.MONGO_URI }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCLOUD_AUTH_JSON }}
 
     steps:
       - name: Checkout code
