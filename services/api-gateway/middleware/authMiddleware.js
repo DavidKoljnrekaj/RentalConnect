@@ -1,7 +1,6 @@
 const axios = require('axios');
 
 module.exports = async (req, res, next) => {
-  console.log(req.body) //RETURNS UNDEFINED
   const token = req.header('Authorization');
   if (!token) return res.status(401).json({ error: 'Access denied' });
 

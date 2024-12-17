@@ -27,9 +27,7 @@ const listingSchema = new mongoose.Schema({
   },
   utilities: {
     included: { type: Boolean, required: true }, // Are utilities included in rent?
-    fixed: { type: Boolean, required: false }, // Is the price of utilities fixed?
-    ammount: { type: Number, required: false }, // Price of utilities if fixed
-    details: { type: [String], required: false }, // List of included utilities 
+    details: { type: String, required: false }, // List of included utilities, price etc.
   },
   images: { type: [String], required: false }, // Array of image URLs
   contact: {
