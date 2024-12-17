@@ -17,6 +17,7 @@ spec:
       containers:
       - name: api-gateway
         image: europe-north1-docker.pkg.dev/rentalconnect/imagerepository/api-gateway:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8000
         env:
