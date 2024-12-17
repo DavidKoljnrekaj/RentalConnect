@@ -12,6 +12,7 @@ jobs:
 
     env: 
       MONGO_URI: ${{ secrets.MONGO_URI }}
+      GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCLOUD_AUTH_JSON }}
 
     steps:
         # Checkout the code
