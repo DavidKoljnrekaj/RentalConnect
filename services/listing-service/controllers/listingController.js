@@ -2,7 +2,8 @@ const listingService = require('../services/listingService');
 
 exports.createListing = async (req, res) => {
   try {
-    const userId = req.user?.id || req.body.createdBy; // Get userId from token or body
+    console.log(req.headers['x-user-id'])
+    const userId = req.headers['x-user-id']; // Get userId from token or body
     const files = req.files || []; // Multer will attach files here
     const listing = await listingService.createListing(req.body, files, userId);
     res.status(201).json(listing);

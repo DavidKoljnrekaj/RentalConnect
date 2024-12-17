@@ -27,17 +27,13 @@ const AddListing = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    // Handle nested fields
+  
     if (name.includes("price.")) {
       const key = name.split(".")[1];
       setFormData({ ...formData, price: { ...formData.price, [key]: value } });
     } else if (name.includes("location.")) {
       const key = name.split(".")[1];
-      setFormData({
-        ...formData,
-        location: { ...formData.location, [key]: value },
-      });
+      setFormData({ ...formData, location: { ...formData.location, [key]: value } });
     } else if (name.includes("propertyDetails.")) {
       const key = name.split(".")[1];
       setFormData({
@@ -46,14 +42,18 @@ const AddListing = () => {
       });
     } else if (name.includes("utilities.")) {
       const key = name.split(".")[1];
-      setFormData({
-        ...formData,
-        utilities: { ...formData.utilities, [key]: value },
-      });
+      setFormData({ ...formData, utilities: { ...formData.utilities, [key]: value } });
+    } else if (name.includes("availability.")) {
+      const key = name.split(".")[1];
+      setFormData({ ...formData, availability: { ...formData.availability, [key]: value } });
+    } else if (name.includes("contact.")) {
+      const key = name.split(".")[1];
+      setFormData({ ...formData, contact: { ...formData.contact, [key]: value } });
     } else {
       setFormData({ ...formData, [name]: value });
     }
   };
+  
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
@@ -291,8 +291,14 @@ const AddListing = () => {
             name="utilities.details"
             value={formData.utilities.details}
             onChange={handleChange}
+            disabled={formData.utilities.included} 
+            placeholder={
+              !formData.utilities.included
+                ? "Provide utility details (e.g., water, electricity, price)"
+                : "Enable to provide details"
+            }
           />
-        </div>
+        </div>  
 
         <div className="form-group">
           <label>Images</label>

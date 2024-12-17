@@ -139,3 +139,5 @@ docker-compose.override.yml
 
 # Typescript
 *.tsbuildinfo
+
+shared/utils/rentalconnect-7238531a3a75.json

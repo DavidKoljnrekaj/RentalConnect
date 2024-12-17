@@ -8,15 +8,15 @@ const ListingService = {
    * @returns {Promise<object>} - The listing data
    */
   getListingById: async (id) => {
-    /*
+    
     try {
       const response = await httpClient.get(`/listings/${id}`); // API Gateway route for listings
       return response.data;
     } catch (error) {
       console.error('Error in ListingService.getListingById:', error);
       throw error.response ? error.response.data : error;
-    }*/
-    
+    }
+    /*
     // Dummy listing data for testing
     return {
       _id: id,
@@ -64,7 +64,7 @@ const ListingService = {
         leaseDuration: '1 year',
       },
       createdAt: '2023-12-01T12:00:00Z',
-    };
+    };*/
   },
 
   /**
@@ -116,6 +116,7 @@ const ListingService = {
 getListings: async (filters = {}) => {
   
   try {
+    console.log(filters)
     const response = await httpClient.get('/search/short-listings', { params: filters });
     return response.data;
   } catch (error) {

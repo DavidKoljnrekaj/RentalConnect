@@ -12,7 +12,10 @@ router.post('/', authMiddleware, (req, res, next) => {
   if (!req.user || !req.user.id) {
     return res.status(401).json({ error: 'User ID not found in token' });
   }
+  req.headers['x-user-id'] = req.user.id; // Attach user ID to headers
   req.body = { ...req.body, createdBy: req.user.id };
+  console.log(req.user.id)
+  console.log(req.body)
   next();
 });
 

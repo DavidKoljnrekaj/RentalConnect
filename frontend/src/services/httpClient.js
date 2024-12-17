@@ -1,17 +1,20 @@
 import axios from 'axios';
 
 const httpClient = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:3000', // API Gateway URL
+  baseURL: process.env.REACT_APP_API_URL, // API Gateway URL
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
+console.log("gateway url:" + process.env.REACT_APP_API_URL)
+
 // Attach access token to requests
 httpClient.interceptors.request.use((config) => {
   const user = localStorage.getItem('user');
   if (user) { 
-  const token = JSON.parse(user).token
+  console.log(JSON.parse(user))
+  const token = JSON.parse(user)
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;

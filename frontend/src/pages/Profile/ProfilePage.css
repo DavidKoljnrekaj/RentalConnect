@@ -5,3 +5,17 @@
     width: 100%;
     padding: 1rem;
   }
+
+  .profile-page {
+    padding-left: 5%;
+  }
+
+  .profile-page h2 {
+    font-size: 3rem;
+    font-weight: 100;
+  }
+
+  .profile-page h3 {
+    font-size: 1.5rem;
+    font-weight: 200  ;
+  }
