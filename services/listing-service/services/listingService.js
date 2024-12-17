@@ -3,12 +3,15 @@ const { Storage } = require('@google-cloud/storage');
 const path = require('path');
 
 // Path to your service account key file
-const keyFilePath = path.join(__dirname, '../../../shared/utils/rentalconnect-7238531a3a75.json');
+const credentials = JSON.parse(process.env.GOOGLE_CLOUD_KEY);
+
+
 
 // Initialize Google Cloud Storage with explicit credentials
 const storage = new Storage({
-  keyFilename: keyFilePath,
+  credentials: credentials
 });
+
 const bucketName = 'rentalconnect-bucket';
 
 exports.createListing = async (data, files, userId) => {
