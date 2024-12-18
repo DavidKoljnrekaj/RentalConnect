@@ -21,7 +21,11 @@ exports.authenticateUser = async (email, password) => {
     process.env.JWT_SECRET,
     { expiresIn: '1h' }
   );  
-  return token;
+  return {
+    token,
+    role: user.role,
+    userId: user._id
+  };
 };
 
 exports.verifyToken = async (token) => {

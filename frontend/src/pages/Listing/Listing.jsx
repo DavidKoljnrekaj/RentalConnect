@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import ListingService from '../../services/listingService';
+import { AuthContext } from '../../context/AuthContext';
 import { useParams } from 'react-router-dom';
 import './Listing.css';
 import RelatedProjects from "./RelatedProjects";
@@ -10,6 +11,9 @@ const Listing = () => {
   const [listing, setListing] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showAdditionalDetails, setShowAdditionalDetails] = useState(false);
+  const { role } = useContext(AuthContext);
+  const { userId } = useContext(AuthContext);
+
   
   useEffect(() => {
     const fetchListing = async () => {
@@ -23,6 +27,22 @@ const Listing = () => {
 
     fetchListing();
   }, [id]);
+
+  const handleApproval = async (action) => {
+    try {
+      if (action === 'approve') {
+        await ListingService.approveListing(id);
+      } else if (action === 'reject') {
+        await ListingService.rejectListing(id);
+      }
+
+      // Refresh the listing data
+      const updatedListing = await ListingService.getListingById(id);
+      setListing(updatedListing);
+    } catch (error) {
+      console.error(`Error ${action}ing listing:`, error);
+    }
+  };
 
   const handlePrevImage = () => {
     setCurrentImageIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : listing.images.length - 1));
@@ -71,8 +91,41 @@ const Listing = () => {
         <p>Size in sqm: {listing.propertyDetails.size}</p>
         <p>Room Number: {listing.propertyDetails.bedrooms}</p>
         <p>Bathroom Number: {listing.propertyDetails.bathrooms}</p>
+
+        {/* Approval Feature for Admins */}
+        {(role === 'admin' || userId === listing.createdBy) && (
+            <div className="admin-approval-section">
+              <h3>Approval Status</h3>
+              <p>
+                Current Status:{' '}
+                <span className={`status-${listing.approvalStatus}`}>
+                  {listing.approvalStatus}
+                </span>
+              </p>
+              {/* Admin Actions */}
+              {role === 'admin' && (
+                <div>
+                  <button
+                    onClick={() => handleApproval('approve')}
+                    className="approve-button"
+                  >
+                    Approve
+                  </button>
+                  <button
+                    onClick={() => handleApproval('reject')}
+                    className="reject-button"
+                  >
+                    Reject
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
       </div>
       </div>
+
+      
+
       <button
         className="toggle-details-button"
         onClick={() => setShowAdditionalDetails(!showAdditionalDetails)}
