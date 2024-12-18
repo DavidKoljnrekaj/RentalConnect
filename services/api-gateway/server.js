@@ -7,6 +7,10 @@ const cors = require('cors');
 module.exports = () => {
   const app = express();
 
+  console.log("User service url:" + process.env.USER_SERVICE_URL)
+  console.log("Listing service url:" + process.env.LISTING_SERVICE_URL)
+  console.log("Search service url:" + process.env.SEARCH_SERVICE_URL)
+
   app.use(cors());
 
     // Middleware for parsing JSON

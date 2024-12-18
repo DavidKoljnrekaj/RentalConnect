@@ -27,6 +27,14 @@ router.delete("/favorites", authMiddleware, async (req, res, next) => {
 // Proxy /auth routes under /users/auth
 router.use(
     '/auth',
+    (req, res, next) => {
+      // Log the incoming request and the proxied target
+      console.log(`Proxying request to: ${route}${req.url}`);
+      console.log(`Method: ${req.method}`);
+      console.log(`Headers:`, req.headers);
+  
+      next();
+    },
     createProxyMiddleware({
       target: route,
       changeOrigin: true,
@@ -46,6 +54,14 @@ router.use(
   // Proxy /users routes directly
   router.use(
     '/',
+    (req, res, next) => {
+      // Log the incoming request and the proxied target
+      console.log(`Proxying request to: ${route}${req.url}`);
+      console.log(`Method: ${req.method}`);
+      console.log(`Headers:`, req.headers);
+  
+      next();
+    },
     createProxyMiddleware({
       target: route,
       changeOrigin: true,

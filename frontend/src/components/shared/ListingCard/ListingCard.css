@@ -32,4 +32,12 @@
     font-weight: 100;
     color: #666;
   }
+
+  .listing-card.pending {
+    background-color: rgba(255, 255, 0, 0.2); /* Light yellow with 20% opacity */
+  }
+  
+  .listing-card.rejected {
+    background-color: rgba(255, 0, 0, 0.2); /* Light red with 10% opacity */
+  }
   

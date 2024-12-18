@@ -11,11 +11,10 @@ console.log("gateway url:" + process.env.REACT_APP_API_URL)
 
 // Attach access token to requests
 httpClient.interceptors.request.use((config) => {
-  const user = localStorage.getItem('user');
-  if (user) { 
-  console.log(JSON.parse(user))
-  const token = JSON.parse(user)
-    config.headers.Authorization = `Bearer ${token}`;
+  const token = localStorage.getItem('user'); // Retrieve token directly
+  if (token) {
+    console.log('Token:', token); // Debug log to ensure the token is correct
+    config.headers.Authorization = `Bearer ${token}`; // Attach token as Bearer
   }
   return config;
 });
