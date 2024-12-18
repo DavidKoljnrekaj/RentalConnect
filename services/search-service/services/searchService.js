@@ -39,7 +39,7 @@ exports.getMyListings = async (userId, page = 1, limit = 10) => {
     { createdBy: userId },
     {
       title: 1,
-      approvalStatus: 1,
+      approvalStatus: 1, 
       'price.monthlyRent': 1,
       images: { $slice: 1 },
       'location.city': 1,

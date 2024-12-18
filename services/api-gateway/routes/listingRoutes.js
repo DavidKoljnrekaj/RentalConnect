@@ -8,7 +8,7 @@ const router = express.Router();
 
 const route = process.env.LISTING_SERVICE_URL || 'http://localhost:3002'
 
-const adminOnly = (req, res, next) => {
+const adminOnly = (req, res, next) => { 
   if (req.user.role !== 'admin') {
     return res.status(403).json({ error: 'Access forbidden: Admins only' });
   }

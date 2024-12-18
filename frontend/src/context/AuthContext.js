@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     const storedRole = localStorage.getItem('role');
-    const storedUserId = localStorage.getItem('userId');
+    const storedUserId = localStorage.getItem('userId'); 
     if (storedUser && storedRole) {
       setUser(storedUser);
       setRole(storedRole);

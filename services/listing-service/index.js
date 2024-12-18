@@ -8,7 +8,7 @@ const listingRoutes = require('./routes/listingRoutes');
 const app = express();
 const PORT = process.env.PORT || 3002;
 
-app.use(express.json());
+app.use(express.json()); 
 
 if (process.env.NODE_ENV !== 'test') {
   mongoose.connect(process.env.MONGO_URI || 'mongodb+srv://admin:ClbUJCmpRWGLTQBd@rentalconnectcluster.4kr7k.mongodb.net/?retryWrites=true&w=majority&appName=RentalConnectCluster')
