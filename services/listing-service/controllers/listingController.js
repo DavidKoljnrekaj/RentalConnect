@@ -48,3 +48,23 @@ exports.deleteListing = async (req, res) => {
     res.status(404).json({ error: error.message });
   }
 };
+
+
+exports.approveListing = async (req, res) => {
+  try {
+    const listing = await listingService.approveListing(req.params.id);
+    res.json({ message: 'Listing approved successfully', listing });
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
+};
+
+exports.rejectListing = async (req, res) => {
+  try {
+    const listing = await listingService.rejectListing(req.params.id);
+    res.json({ message: 'Listing rejected successfully', listing });
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
+};
+  
