@@ -23,8 +23,6 @@ router.post('/', authMiddleware, (req, res, next) => {
   }
   req.headers['x-user-id'] = req.user.id; // Attach user ID to headers
   req.body = { ...req.body, createdBy: req.user.id };
-  console.log(req.user.id)
-  console.log(req.body)
   next();
 });
 
@@ -57,6 +55,14 @@ router.patch('/:id/reject', authMiddleware, adminOnly, (req, res, next) => {
 // Proxy all requests to Listing Service
 router.use(
   '/',
+  (req, res, next) => {
+    // Log the incoming request and the proxied target
+    console.log(`Proxying request to: ${route}${req.url}`);
+    console.log(`Method: ${req.method}`);
+    console.log(`Headers:`, req.headers);
+
+    next();
+  },
   createProxyMiddleware({
     target: route,
     changeOrigin: true,

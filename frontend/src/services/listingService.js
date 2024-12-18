@@ -197,6 +197,26 @@ getFavoritedListings: async () => {
   }
 },
 
+getMyListings: async () => {
+  try {
+    const response = await httpClient.get('/search/my-listings');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching my listings:', error);
+    throw error.response ? error.response.data : error;
+  }
+},
+
+getPendingShortListings: async () => {
+  try {
+    const response = await httpClient.get('/search/pending-short-listings');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching pending listings:', error);
+    throw error.response ? error.response.data : error;
+  }
+},
+
 
 };
 

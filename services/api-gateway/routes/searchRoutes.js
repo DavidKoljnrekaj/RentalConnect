@@ -23,6 +23,14 @@ router.get('/pending-short-listings', authMiddleware, (req, res, next) => {
 // Allow clients and admins to access search
 router.use(
   '/',
+  (req, res, next) => {
+    // Log the incoming request and the proxied target
+    console.log(`Proxying request to: ${route}${req.url}`);
+    console.log(`Method: ${req.method}`);
+    console.log(`Headers:`, req.headers);
+
+    next();
+  },
   createProxyMiddleware({
     target: route,
     changeOrigin: true,
