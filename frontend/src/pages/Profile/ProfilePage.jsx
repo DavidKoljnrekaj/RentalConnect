@@ -52,7 +52,11 @@ const ProfilePage = () => {
         {myListings.length > 0 ? (
           <div className="listings-grid">
             {myListings.map((listing) => (
-              <ListingCard key={listing.id} listing={listing} />
+              <ListingCard 
+              key={listing.id} 
+              listing={listing} 
+              className={`listing-card ${listing.approvalStatus}`}
+              />
             ))}
           </div>
         ) : (

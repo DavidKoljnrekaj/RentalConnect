@@ -217,6 +217,33 @@ getPendingShortListings: async () => {
   }
 },
 
+/**
+   * Approve a listing (Admin only)
+   * @param {string} id - The ID of the listing
+   * @returns {Promise<void>}
+   */
+approveListing: async (id) => {
+  try {
+    await httpClient.patch(`/listings/${id}/approve`); // Call Listing Microservice
+  } catch (error) {
+    console.error('Error in ListingService.approveListing:', error);
+    throw error.response ? error.response.data : error;
+  }
+},
+
+/**
+ * Reject a listing (Admin only)
+ * @param {string} id - The ID of the listing
+ * @returns {Promise<void>}
+ */
+rejectListing: async (id) => {
+  try {
+    await httpClient.patch(`/listings/${id}/reject`); // Call Listing Microservice
+  } catch (error) {
+    console.error('Error in ListingService.rejectListing:', error);
+    throw error.response ? error.response.data : error;
+  }
+},
 
 };
 
