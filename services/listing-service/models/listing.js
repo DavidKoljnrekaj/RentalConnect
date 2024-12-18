@@ -41,6 +41,13 @@ const listingSchema = new mongoose.Schema({
   },
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Reference to the user
   createdAt: { type: Date, default: Date.now }, // Creation date
+
+  approvalStatus: {
+    type: String,
+    enum: ['approved', 'pending', 'rejected'],
+    default: 'pending', // Default to "pending" on creation
+  },
+
 });
 
 module.exports = mongoose.model('Listing', listingSchema);

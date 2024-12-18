@@ -33,6 +33,7 @@ exports.createListing = async (data, files, userId) => {
     ...data,
     images: uploadedImages,
     createdBy: userId,
+    approvalStatus: 'pending', // Explicitly set to pending
   };
 
   const listing = new Listing(listingData);
@@ -62,3 +63,16 @@ exports.deleteListing = async (id) => {
   if (!listing) throw new Error('Listing not found or unauthorized');
   return listing;
 };
+
+exports.approveListing = async (id) => {
+  const listing = await Listing.findByIdAndUpdate(id, { approvalStatus: 'approved' }, { new: true });
+  if (!listing) throw new Error('Listing not found');
+  return listing;
+};
+
+exports.rejectListing = async (id) => {
+  const listing = await Listing.findByIdAndUpdate(id, { approvalStatus: 'rejected' }, { new: true });
+  if (!listing) throw new Error('Listing not found');
+  return listing;
+};
+

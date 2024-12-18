@@ -30,10 +30,11 @@ describe('Search Service - getShortListings', () => {
       images: ['https://example.com/image1.jpg'],
       location: { address: '123 Main St', city: 'New York' },
       propertyDetails: { type: 'apartment', size: 85, bedrooms: 2, bathrooms: 2, furnished: true },
-      utilities: { included: true, fixed: true, amount: 150, details: ['water', 'electricity', 'internet'] },
+      utilities: { included: true, fixed: true, amount: 150, details: 'water, electricity, internet, pool' },
       contact: { name: 'John Doe', phone: '123-456-7890', email: 'john.doe@example.com' },
       availability: { availableFrom: '2024-01-01', leaseDuration: '1 year' },
       createdBy: new mongoose.Types.ObjectId(),
+      approvalStatus: 'approved'
     },
     {
       title: 'Cozy Studio in Suburbs',
@@ -42,10 +43,11 @@ describe('Search Service - getShortListings', () => {
       images: ['https://example.com/image2.jpg'],
       location: { address: '456 Elm St', city: 'Los Angeles' },
       propertyDetails: { type: 'studio', size: 45, bedrooms: 1, bathrooms: 1, furnished: false },
-      utilities: { included: true, fixed: false, details: ['water', 'internet'] },
+      utilities: { included: true, fixed: false, details: 'water, electricity, internet, pool' },
       contact: { name: 'Jane Smith', phone: '987-654-3210', email: 'jane.smith@example.com' },
       availability: { availableFrom: '2024-02-01', leaseDuration: '6 months' },
       createdBy: new mongoose.Types.ObjectId(),
+      approvalStatus: 'approved'
     },
     {
       title: 'Luxury House in Beverly Hills',
@@ -54,10 +56,11 @@ describe('Search Service - getShortListings', () => {
       images: ['https://example.com/image3.jpg'],
       location: { address: '789 Beverly Dr', city: 'Los Angeles' },
       propertyDetails: { type: 'house', size: 300, bedrooms: 4, bathrooms: 3, furnished: true },
-      utilities: { included: true, fixed: true, amount: 500, details: ['water', 'electricity', 'internet', 'pool'] },
+      utilities: { included: true, fixed: true, amount: 500, details: 'water, electricity, internet, pool' },
       contact: { name: 'Luxury Agent', phone: '555-555-5555', email: 'agent@luxuryhomes.com' },
       availability: { availableFrom: '2024-03-01', leaseDuration: '1 year' },
       createdBy: new mongoose.Types.ObjectId(),
+      approvalStatus: 'approved'
     },
   ];
   
