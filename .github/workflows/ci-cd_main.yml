@@ -58,23 +58,23 @@ jobs:
           CHANGED_DIRS=$(git diff --name-only HEAD~1 HEAD | grep -oE '^(frontend|services/[^/]+)' | cut -d'/' -f1 | sort | uniq)
           for dir in $CHANGED_DIRS; do
             if [ "$dir" = "frontend" ]; then
-              docker build --build-arg REACT_APP_API_URL="http://35.228.208.159" -t europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/frontend ./frontend
+              docker build --no-cache --build-arg REACT_APP_API_URL="http://35.228.208.159" -t europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/frontend ./frontend
               docker push europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/frontend
             fi
             if [ "$dir" = "api-gateway" ]; then
-              docker build -t europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/api-gateway ./services/api-gateway
+              docker build --no-cache -t europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/api-gateway ./services/api-gateway
               docker push europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/api-gateway
             fi
             if [ "$dir" = "user-service" ]; then
-              docker build -t europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/user-service ./services/user-service
+              docker build --no-cache -t europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/user-service ./services/user-service
               docker push europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/user-service
             fi
             if [ "$dir" = "listing-service" ]; then
-              docker build -t europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/listing-service ./services/listing-service
+              docker build --no-cache -t europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/listing-service ./services/listing-service
               docker push europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/listing-service
             fi
             if [ "$dir" = "search-service" ]; then
-              docker build -t europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/search-service ./services/search-service
+              docker build --no-cache -t europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/search-service ./services/search-service
               docker push europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/search-service
             fi
           done
@@ -106,23 +106,31 @@ jobs:
             --region ${{ secrets.GKE_CLUSTER_REGION }} \
             --project ${{ secrets.GCLOUD_PROJECT_ID }}
 
+      - name: Verify Current Commit
+        run: git log -1
+      
       - name: Deploy Updated Services to GKE
         run: |
           CHANGED_DIRS=$(git diff --name-only HEAD~1 HEAD | grep -oE '^(frontend|services/[^/]+)' | cut -d'/' -f1 | sort | uniq)
           for dir in $CHANGED_DIRS; do
             if [ "$dir" = "frontend" ] && [ -f k8s/frontend-deployment.yaml ]; then
               kubectl apply -f k8s/frontend-deployment.yaml
+              kubectl rollout restart deployment/frontend
             fi
             if [ "$dir" = "api-gateway" ] && [ -f k8s/api-gateway-deployment.yaml ]; then
               kubectl apply -f k8s/api-gateway-deployment.yaml
+              kubectl rollout restart deployment/api-gateway
             fi
             if [ "$dir" = "user-service" ] && [ -f k8s/user-service-deployment.yaml ]; then
               kubectl apply -f k8s/user-service-deployment.yaml
+              kubectl rollout restart deployment/user-service
             fi
             if [ "$dir" = "listing-service" ] && [ -f k8s/listing-service-deployment.yaml ]; then
               kubectl apply -f k8s/listing-service-deployment.yaml
+              kubectl rollout restart deployment/listing-service
             fi
             if [ "$dir" = "search-service" ] && [ -f k8s/search-service-deployment.yaml ]; then
               kubectl apply -f k8s/search-service-deployment.yaml
+              kubectl rollout restart deployment/search-service
             fi
           done
