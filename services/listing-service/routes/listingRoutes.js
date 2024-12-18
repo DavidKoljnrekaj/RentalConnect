@@ -11,5 +11,8 @@ router.get('/:id', listingController.getListingById); // Public route
 router.get('/', listingController.getAllListings); // Public route
 router.put('/:id', listingController.updateListing); // Protected route
 router.delete('/:id', listingController.deleteListing); // Protected route
+router.patch('/:id/approve', listingController.approveListing); // Approve listing
+router.patch('/:id/reject', listingController.rejectListing);   // Reject listing
+
 
 module.exports = router;
