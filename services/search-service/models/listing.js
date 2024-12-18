@@ -13,7 +13,7 @@ const listingSchema = new mongoose.Schema({
     state: { type: String, required: false }, // State/Province (optional, depending on country)
     postalCode: { type: String, required: false }, // Postal code (optional)
     coordinates: { 
-      lat: { type: Number, required: false }, // Latitude 
+      lat: { type: Number, required: false }, // Latitude
       lng: { type: Number, required: false }, // Longitude
     },
   },
@@ -27,9 +27,7 @@ const listingSchema = new mongoose.Schema({
   },
   utilities: {
     included: { type: Boolean, required: true }, // Are utilities included in rent?
-    fixed: { type: Boolean, required: false }, // Is the price of utilities fixed?
-    ammount: { type: Number, required: false }, // Price of utilities if fixed
-    details: { type: [String], required: false }, // List of included utilities 
+    details: { type: String, required: false }, // List of included utilities, price etc.
   },
   images: { type: [String], required: false }, // Array of image URLs
   contact: {
@@ -43,6 +41,13 @@ const listingSchema = new mongoose.Schema({
   },
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Reference to the user
   createdAt: { type: Date, default: Date.now }, // Creation date
+
+  approvalStatus: {
+    type: String,
+    enum: ['approved', 'pending', 'rejected'],
+    default: 'pending', // Default to "pending" on creation
+  },
+
 });
 
 module.exports = mongoose.model('Listing', listingSchema);
