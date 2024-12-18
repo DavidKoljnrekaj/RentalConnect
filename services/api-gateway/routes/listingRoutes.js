@@ -8,6 +8,15 @@ const router = express.Router();
 
 const route = process.env.LISTING_SERVICE_URL || 'http://localhost:3002'
 
+const adminOnly = (req, res, next) => {
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ error: 'Access forbidden: Admins only' });
+  }
+  next();
+};
+
+
+
 router.post('/', authMiddleware, (req, res, next) => {
   if (!req.user || !req.user.id) {
     return res.status(401).json({ error: 'User ID not found in token' });
@@ -31,10 +40,17 @@ router.get('/favorites', authMiddleware, async (req, res) => {
 });
 
 // Admin-only route to delete listings  
-router.delete('/:id', authMiddleware, (req, res, next) => {
-  if (req.user.role !== 'admin') {
-    return res.status(403).json({ error: 'Access forbidden: Admins only' });
-  }
+router.delete('/:id', authMiddleware, adminOnly, (req, res, next) => {
+  next();
+});
+
+// Admin-only route to delete listings  
+router.patch('/:id/approve', authMiddleware, adminOnly, (req, res, next) => {
+  next();
+});
+
+// Admin-only route to delete listings  
+router.patch('/:id/reject', authMiddleware, adminOnly, (req, res, next) => {
   next();
 });
 
