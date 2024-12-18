@@ -106,6 +106,9 @@ jobs:
             --region ${{ secrets.GKE_CLUSTER_REGION }} \
             --project ${{ secrets.GCLOUD_PROJECT_ID }}
 
+      - name: Verify Current Commit
+        run: git log -1
+      
       - name: Deploy Updated Services to GKE
         run: |
           CHANGED_DIRS=$(git diff --name-only HEAD~1 HEAD | grep -oE '^(frontend|services/[^/]+)' | cut -d'/' -f1 | sort | uniq)
