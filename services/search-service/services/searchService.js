@@ -1,12 +1,11 @@
 const Listing = require('../models/listing'); 
 
-// Get short listings with pagination and optional filters
+// Get short listings with pagination and optional filters (only approved)
 exports.getShortListings = async (filters = {}, page = 1, limit = 10) => {
   const skip = (page - 1) * limit;
 
-  const query = {};
+  const query = { approvalStatus: 'approved' }; // Filter only approved listings
 
-  //add filters laterrr
   if (filters.city) query['location.city'] = filters.city;
   if (filters.type) query['propertyDetails.type'] = filters.type;
   if (filters.minPrice) query['price.monthlyRent'] = { $gte: filters.minPrice };
@@ -20,7 +19,7 @@ exports.getShortListings = async (filters = {}, page = 1, limit = 10) => {
   const listings = await Listing.find(query, {
     title: 1,
     'price.monthlyRent': 1,
-    'images': { $slice: 1 }, // Return only the first image
+    images: { $slice: 1 }, // Return only the first image
     'location.city': 1,
     'propertyDetails.type': 1,
   })
@@ -28,6 +27,51 @@ exports.getShortListings = async (filters = {}, page = 1, limit = 10) => {
     .limit(limit);
 
   const total = await Listing.countDocuments(query);
+
+  return { listings, total };
+};
+
+// Get listings created by a specific user
+exports.getMyListings = async (userId, page = 1, limit = 10) => {
+  const skip = (page - 1) * limit;
+
+  const listings = await Listing.find(
+    { createdBy: userId },
+    {
+      title: 1,
+      approvalStatus: 1,
+      'price.monthlyRent': 1,
+      images: { $slice: 1 },
+      'location.city': 1,
+      'propertyDetails.type': 1,
+    }
+  )
+    .skip(skip)
+    .limit(limit);
+
+  const total = await Listing.countDocuments({ createdBy: userId });
+
+  return { listings, total };
+};
+
+// Get pending listings for admin approval
+exports.getPendingShortListings = async (page = 1, limit = 10) => {
+  const skip = (page - 1) * limit;
+
+  const listings = await Listing.find(
+    { approvalStatus: 'pending' },
+    {
+      title: 1,
+      'price.monthlyRent': 1,
+      images: { $slice: 1 },
+      'location.city': 1,
+      'propertyDetails.type': 1,
+    }
+  )
+    .skip(skip)
+    .limit(limit);
+
+  const total = await Listing.countDocuments({ approvalStatus: 'pending' });
 
   return { listings, total };
 };

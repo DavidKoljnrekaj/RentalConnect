@@ -5,7 +5,6 @@ exports.getShortListings = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
 
-    // Extract filters from query parameters
     const filters = {
       city: req.query.city,
       type: req.query.type,
@@ -25,6 +24,43 @@ exports.getShortListings = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+exports.getMyListings = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const { listings, total } = await searchService.getMyListings(req.user.id, page, limit);
+
+    res.json({
+      listings,
+      total,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+    });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.getPendingShortListings = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const { listings, total } = await searchService.getPendingShortListings(page, limit);
+
+    res.json({
+      listings,
+      total,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+    });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 
 
 exports.getMapListings = async (req, res) => {
