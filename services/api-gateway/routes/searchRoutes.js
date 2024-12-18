@@ -6,6 +6,20 @@ const router = express.Router();
 
 const route = process.env.SEARCH_SERVICE_URL || 'http://localhost:3003'
 
+// Route to fetch user's own listings
+router.get('/my-listings', authMiddleware, (req, res, next) => {
+  req.headers['x-user-id'] = req.user.id; // Attach user ID to headers
+  next();
+});
+
+// Route to fetch pending short listings for admin approval
+router.get('/pending-short-listings', authMiddleware, (req, res, next) => {
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ error: 'Access forbidden: Admins only' });
+  }
+  next();
+});
+
 // Allow clients and admins to access search
 router.use(
   '/',

@@ -30,7 +30,9 @@ exports.getMyListings = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
 
-    const { listings, total } = await searchService.getMyListings(req.user.id, page, limit);
+    const userId = req.headers['x-user-id'];
+
+    const { listings, total } = await searchService.getMyListings(userId, page, limit);
 
     res.json({
       listings,
