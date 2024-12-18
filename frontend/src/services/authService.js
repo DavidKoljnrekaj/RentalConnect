@@ -5,7 +5,7 @@ const authService = {
    * Login method that updates the AuthContext on success
    * @param {object} data - { username, password }
    * @param {function} login - AuthContext login function
-   * @returns {Promise<void>}
+   * @returns {Promise<void>} 
    */
   login: async (data, login) => {
     try {

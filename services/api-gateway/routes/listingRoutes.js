@@ -4,7 +4,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 const UserService = require('../services/UserService');
 const ListingService = require('../services/ListingService'); 
 
-const router = express.Router();
+const router = express.Router(); 
 
 const route = process.env.LISTING_SERVICE_URL || 'http://localhost:3002'
 

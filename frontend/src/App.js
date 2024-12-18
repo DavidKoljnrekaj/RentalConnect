@@ -8,7 +8,7 @@ import ListingsPage from './pages/ListingsPage/ListingsPage'
 import AddListing from './pages/AddListing/AddListing';
 import MapPage from './pages/MapPage/MapPage';
 import ProfilePage from './pages/Profile/ProfilePage';
-
+ 
 const App = () => {
   return (
     <Router>

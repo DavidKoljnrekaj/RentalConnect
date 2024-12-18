@@ -13,6 +13,7 @@ jobs:
     env: 
       MONGO_URI: ${{ secrets.MONGO_URI }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCLOUD_AUTH_JSON }}
 
     steps:
       - name: Checkout code
@@ -57,7 +58,7 @@ jobs:
           CHANGED_DIRS=$(git diff --name-only HEAD~1 HEAD | grep -oE '^(frontend|services/[^/]+)' | cut -d'/' -f1 | sort | uniq)
           for dir in $CHANGED_DIRS; do
             if [ "$dir" = "frontend" ]; then
-              docker build -t europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/frontend ./frontend
+              docker build --build-arg REACT_APP_API_URL="http://35.228.208.159" -t europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/frontend ./frontend
               docker push europe-north1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/imagerepository/frontend
             fi
             if [ "$dir" = "api-gateway" ]; then
