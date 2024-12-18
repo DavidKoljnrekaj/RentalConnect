@@ -14,8 +14,8 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const { token, role } = await authService.authenticateUser(email, password); // Destructure token and role
-    res.json({ token, role }); // Directly return token and role
+    const { token, role, userId } = await authService.authenticateUser(email, password); // Destructure token and role
+    res.json({ token, role, userId }); // Directly return token and role
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

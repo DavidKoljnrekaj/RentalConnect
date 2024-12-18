@@ -23,7 +23,8 @@ exports.authenticateUser = async (email, password) => {
   );  
   return {
     token,
-    role: user.role
+    role: user.role,
+    userId: user._id
   };
 };
 

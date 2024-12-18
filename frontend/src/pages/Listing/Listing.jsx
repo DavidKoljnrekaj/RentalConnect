@@ -12,6 +12,7 @@ const Listing = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showAdditionalDetails, setShowAdditionalDetails] = useState(false);
   const { role } = useContext(AuthContext);
+  const { userId } = useContext(AuthContext);
 
   
   useEffect(() => {
@@ -92,7 +93,7 @@ const Listing = () => {
         <p>Bathroom Number: {listing.propertyDetails.bathrooms}</p>
 
         {/* Approval Feature for Admins */}
-        {role === 'admin' && (
+        {(role === 'admin' || userId === listing.createdBy) && (
             <div className="admin-approval-section">
               <h3>Approval Status</h3>
               <p>
@@ -101,12 +102,23 @@ const Listing = () => {
                   {listing.approvalStatus}
                 </span>
               </p>
-              <button onClick={() => handleApproval('approve')} className="approve-button">
-                Approve
-              </button>
-              <button onClick={() => handleApproval('reject')} className="reject-button">
-                Reject
-              </button>
+              {/* Admin Actions */}
+              {role === 'admin' && (
+                <div>
+                  <button
+                    onClick={() => handleApproval('approve')}
+                    className="approve-button"
+                  >
+                    Approve
+                  </button>
+                  <button
+                    onClick={() => handleApproval('reject')}
+                    className="reject-button"
+                  >
+                    Reject
+                  </button>
+                </div>
+              )}
             </div>
           )}
       </div>
