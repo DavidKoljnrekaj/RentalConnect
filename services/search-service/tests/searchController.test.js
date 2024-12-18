@@ -34,6 +34,7 @@ describe('Search Service - getShortListings', () => {
       contact: { name: 'John Doe', phone: '123-456-7890', email: 'john.doe@example.com' },
       availability: { availableFrom: '2024-01-01', leaseDuration: '1 year' },
       createdBy: new mongoose.Types.ObjectId(),
+      approvalStatus: 'approved'
     },
     {
       title: 'Cozy Studio in Suburbs',
@@ -46,6 +47,7 @@ describe('Search Service - getShortListings', () => {
       contact: { name: 'Jane Smith', phone: '987-654-3210', email: 'jane.smith@example.com' },
       availability: { availableFrom: '2024-02-01', leaseDuration: '6 months' },
       createdBy: new mongoose.Types.ObjectId(),
+      approvalStatus: 'approved'
     },
     {
       title: 'Luxury House in Beverly Hills',
@@ -58,6 +60,7 @@ describe('Search Service - getShortListings', () => {
       contact: { name: 'Luxury Agent', phone: '555-555-5555', email: 'agent@luxuryhomes.com' },
       availability: { availableFrom: '2024-03-01', leaseDuration: '1 year' },
       createdBy: new mongoose.Types.ObjectId(),
+      approvalStatus: 'approved'
     },
   ];
   
