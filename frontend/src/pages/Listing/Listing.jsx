@@ -16,7 +16,8 @@ const Listing = () => {
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const { role, userId, isAuthenticated } = useContext(AuthContext);
 
-  
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchListing = async () => {
       try {
@@ -51,6 +52,10 @@ const Listing = () => {
     } catch (error) {
       console.error(`Error ${action}ing listing:`, error);
     }
+  };
+
+  const handleEditListing = () => {
+    navigate(`/edit-listing/${id}`); // Navigate to the edit page
   };
 
   const handlePrevImage = () => {
@@ -142,6 +147,15 @@ const Listing = () => {
                   {listing.approvalStatus}
                 </span>
               </p>
+               {/* Render Edit Listing Button */}
+                {userId === listing.createdBy && (
+                  <button
+                    className="edit-listing-button"
+                    onClick={handleEditListing}
+                  >
+                    Edit Listing
+                  </button>
+                )}
               {/* Admin Actions */}
               {role === 'admin' && (
                 <div>
