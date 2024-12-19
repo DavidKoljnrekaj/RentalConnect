@@ -245,6 +245,26 @@ rejectListing: async (id) => {
   }
 },
 
+addToFavourites: async (listingId) => {
+  try {
+    await httpClient.post('users/favorites', { listingId });
+  } catch (error) {
+    console.error('Error adding to favourites:', error);
+    throw error.response ? error.response.data : error;
+  }
+},
+
+removeFromFavourites: async (listingId) => {
+  try {
+    await httpClient.delete('users/favorites', {
+      data: { listingId },
+    });
+  } catch (error) {
+    console.error('Error removing from favourites:', error);
+    throw error.response ? error.response.data : error;
+  }
+},
+
 };
 
 
