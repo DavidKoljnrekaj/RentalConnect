@@ -84,3 +84,19 @@ exports.getShortListingsByIds = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+
+exports.getRelatedListings = async (req, res) => {
+  try {
+    const listingId = req.params.id;
+
+    if (!mongoose.Types.ObjectId.isValid(listingId)) {
+      return res.status(400).json({ error: 'Invalid listing ID' });
+    }
+
+    const relatedListings = await searchService.getRelatedListings(listingId);
+    res.status(200).json(relatedListings);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};

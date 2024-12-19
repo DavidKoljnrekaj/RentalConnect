@@ -8,11 +8,11 @@ export const AuthProvider = ({ children }) => {
   const [role, setRole] = useState(null);
   const [userId, setUserId] = useState(null);
 
-  // Load authentication state from localStorage when the app loads
+  // Load authentication state from sessionStorage when the app loads
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    const storedRole = localStorage.getItem('role');
-    const storedUserId = localStorage.getItem('userId');
+    const storedUser = sessionStorage.getItem('user');
+    const storedRole = sessionStorage.getItem('role');
+    const storedUserId = sessionStorage.getItem('userId');
     if (storedUser && storedRole) {
       setUser(storedUser);
       setRole(storedRole);
@@ -22,9 +22,9 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = (userData) => {
-    localStorage.setItem('user', userData.token); // Store token directly
-    localStorage.setItem('role', userData.role); // Store role directly
-    localStorage.setItem('userId', userData.userId); // Store role directly
+    sessionStorage.setItem('user', userData.token); // Store token directly
+    sessionStorage.setItem('role', userData.role); // Store role directly
+    sessionStorage.setItem('userId', userData.userId); // Store role directly
     console.log('context user', userData.token);
     console.log('context role', userData.role);
     setUser(userData.token); // Set token in state
@@ -34,9 +34,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem('user');
-    localStorage.removeItem('role');
-    localStorage.removeItem('userId')
+    sessionStorage.removeItem('user');
+    sessionStorage.removeItem('role');
+    sessionStorage.removeItem('userId')
     setUser(null);
     setRole(null);
     setUserId(null);
