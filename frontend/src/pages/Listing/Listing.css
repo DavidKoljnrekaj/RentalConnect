@@ -236,4 +236,17 @@
   .popup button:hover {
     background-color: #0056b3;
   }
+
+  .heading-and-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  
+  .heading-and-button h3 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 300;
+  }
   
