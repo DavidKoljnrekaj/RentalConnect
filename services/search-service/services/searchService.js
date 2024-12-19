@@ -78,7 +78,10 @@ exports.getPendingShortListings = async (page = 1, limit = 10) => {
 
 exports.getMapListings = async () => {
   try {
-    const listings = await Listing.find({}, 'title price.monthlyRent location.coordinates');
+    const listings = await Listing.find({
+      "location.coordinates.lat": { $ne: null },
+      "location.coordinates.lng": { $ne: null }
+    }, 'title price.monthlyRent location.coordinates');
     return listings.map((listing) => ({
       id: listing._id,
       title: listing.title,
@@ -93,7 +96,6 @@ exports.getMapListings = async () => {
 };
 
 exports.getShortListingsByIds = async (listingIds) => {
-  console.log(listingIds)
     const listings = await Listing.find(
       { _id: { $in: listingIds } },
       { title: 1, price: 1, images: { $slice: 1 } } // Return only necessary fields

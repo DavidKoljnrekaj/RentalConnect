@@ -10,6 +10,7 @@ router.post("/favorites", authMiddleware, async (req, res, next) => {
   if (!req.user || !req.user.id) {
     return res.status(401).json({ error: 'User ID not found in token' });
   }
+  req.headers['x-user-id'] = req.user.id; // Attach user ID to headers
   req.body = { ...req.body, userId: req.user.id };
   next();
 });

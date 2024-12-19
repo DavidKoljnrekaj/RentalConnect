@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { useNavigate } from "react-router-dom";
 import L from 'leaflet';
 import ListingService from '../../services/listingService';
 import './MapPage.css';
@@ -15,6 +16,11 @@ L.Icon.Default.mergeOptions({
 
 const MapPage = () => {
   const [mapListings, setMapListings] = useState([]);
+  const navigate = useNavigate();
+
+  const handleClick = (listingId) => {
+    navigate(`/listing/${listingId}`); // Redirect to the listing details page
+  };
 
   useEffect(() => {
     const fetchMapListings = async () => {
@@ -45,7 +51,7 @@ const MapPage = () => {
             <Popup>
               <h3>{listing.title}</h3>
               <p>Rent: ${listing.price}/month</p>
-              <a href={`/listing/${listing.id}`}>View Details</a>
+              <a href="#" onClick={() => handleClick(listing.id)}>View Details</a>
             </Popup>
           </Marker>
         ))}

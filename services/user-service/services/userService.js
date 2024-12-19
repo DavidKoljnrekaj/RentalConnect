@@ -23,6 +23,7 @@ exports.removeFavorite = async (Id, userId) => {
     user.favorites = user.favorites.filter(
       (listingId) => listingId !== Id
     );
+    await user.save();
     return user.favorites
 };
 
