@@ -249,4 +249,16 @@
     font-size: 1.8rem;
     font-weight: 300;
   }
+
+  .listing-map-container {
+    margin-top: 2rem;
+    margin-left: 7%;
+    margin-right: 7%;
+  }
+  
+  .listing-map-container h3 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    font-weight: 400;
+  }
   

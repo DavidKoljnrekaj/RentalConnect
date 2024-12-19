@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import ListingService from '../../services/listingService';
 import { AuthContext } from '../../context/AuthContext';
 import { useParams } from 'react-router-dom';
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import './Listing.css';
 import RelatedProjects from "./RelatedProjects";
 
@@ -201,8 +202,24 @@ const Listing = () => {
             <p>Included Utilities: {listing.utilities.details.join(', ')}</p>
           )}
         </div>
-
       </div>
+      {listing.location?.coordinates?.lat && listing.location?.coordinates?.lng && (
+          <div style={{ marginTop: '2rem', marginLeft: '7%', marginRight: '7%' }}>
+            <h3>Listing Location</h3>
+            <MapContainer
+              center={[listing.location.coordinates.lat, listing.location.coordinates.lng]}
+              zoom={15}
+              scrollWheelZoom={false}
+              style={{ height: '300px', width: '100%', borderRadius: '10px', border: '1px solid #ccc' }}
+            >
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
+              />
+              <Marker position={[listing.location.coordinates.lat, listing.location.coordinates.lng]} />
+            </MapContainer>
+          </div>
+        )}
       <RelatedProjects currentListingId={id} />
     </div>
   );
