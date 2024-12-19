@@ -41,6 +41,11 @@ const Navbar = () => {
           <li>
             <Link to="/listings">LISTINGS</Link>
           </li>
+          {isAuthenticated && (
+            <li>
+              <Link to="/add-listing">ADD LISTING</Link>
+            </li>
+          )}
         </ul>
         <div className="navbar-auth">
           {isAuthenticated ? (
@@ -48,9 +53,9 @@ const Navbar = () => {
               <Link to="/profile" className="navbar-profile">
                 {user?.username || 'Profile'}
               </Link>
-              <button onClick={logout} className="logout-button">
+              <Link to="/" onClick={logout} className="logout-button">
                 Logout
-              </button>
+              </Link>
             </>
           ) : (
             <button onClick={openLogin} className="login-button">

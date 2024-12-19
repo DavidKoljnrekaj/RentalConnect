@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./AddListing.css";
+import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import ListingService from "../../services/listingService";
 
 const AddListing = () => {
@@ -7,7 +8,7 @@ const AddListing = () => {
     title: "",
     description: "",
     price: { monthlyRent: "", deposit: "" },
-    location: { address: "", city: "", state: "", postalCode: "" },
+    location: { address: "", city: "", state: "", postalCode: "", coordinates: { lat: null, lng: null } },
     propertyDetails: {
       type: "apartment",
       size: "",
@@ -33,7 +34,10 @@ const AddListing = () => {
       setFormData({ ...formData, price: { ...formData.price, [key]: value } });
     } else if (name.includes("location.")) {
       const key = name.split(".")[1];
-      setFormData({ ...formData, location: { ...formData.location, [key]: value } });
+      setFormData({
+        ...formData,
+        location: { ...formData.location, [key]: value },
+      });
     } else if (name.includes("propertyDetails.")) {
       const key = name.split(".")[1];
       setFormData({
@@ -49,10 +53,26 @@ const AddListing = () => {
     } else if (name.includes("contact.")) {
       const key = name.split(".")[1];
       setFormData({ ...formData, contact: { ...formData.contact, [key]: value } });
-    } else {
+    } 
+    else {
       setFormData({ ...formData, [name]: value });
     }
   };
+
+  const LocationSelector = () => {
+    useMapEvents({
+      click: (e) => {
+        const { lat, lng } = e.latlng;
+        console.log("Selected coordinates:", { lat, lng }); // Debug log
+        setFormData((prevData) => ({
+          ...prevData,
+          location: { ...prevData.location, coordinates: { lat, lng } },
+        }));
+      },
+    });
+    return null;
+  };
+  
   
 
   const handleImageChange = (e) => {
@@ -63,34 +83,44 @@ const AddListing = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    // Create a FormData object
+    if (!formData.location.coordinates.lat || !formData.location.coordinates.lng) {
+      alert("Please select a location on the map.");
+      return;
+    }
+  
     const formDataToSend = new FormData();
   
-    // Append images
-    formData.images.forEach((file) => {
-      formDataToSend.append('images', file);
-    });
-  
-    // Append the rest of the fields
-    Object.entries(formData).forEach(([key, value]) => {
-      if (typeof value === 'object' && !Array.isArray(value)) {
-        Object.entries(value).forEach(([nestedKey, nestedValue]) => {
-          formDataToSend.append(`${key}.${nestedKey}`, nestedValue);
+    // Helper function to handle nested objects
+    const appendNestedData = (prefix, data) => {
+      if (typeof data === "object" && data !== null && !Array.isArray(data)) {
+        Object.entries(data).forEach(([key, value]) => {
+          appendNestedData(`${prefix}.${key}`, value);
         });
-      } else if (key !== 'images') {
-        formDataToSend.append(key, value);
+      } else {
+        formDataToSend.append(prefix, data);
+      }
+    };
+  
+    // Flatten each top-level field
+    Object.entries(formData).forEach(([key, value]) => {
+      if (key === "images") {
+        value.forEach((file) => formDataToSend.append("images", file));
+      } else {
+        appendNestedData(key, value);
       }
     });
   
     try {
+      console.log("Submitting data:", Array.from(formDataToSend.entries())); // Debugging log
       const newListing = await ListingService.addListing(formDataToSend);
-      alert('Listing added successfully!');
+      alert("Listing added successfully!");
       console.log(newListing);
     } catch (error) {
-      console.error('Error adding listing:', error);
-      alert('Failed to add listing.');
+      console.error("Error adding listing:", error);
+      alert("Failed to add listing.");
     }
   };
+  
   
 
   return (
@@ -359,6 +389,24 @@ const AddListing = () => {
             required
           />
         </div>
+
+        {/* Map Section */}
+        <h3>Select Location on Map</h3>
+        <MapContainer
+          center={[45.815, 15.9819]}
+          zoom={12}
+          scrollWheelZoom={true}
+          style={{ height: "300px", marginBottom: "1rem" }}
+        >
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
+          />
+          <LocationSelector />
+          {formData.location.coordinates.lat && formData.location.coordinates.lng && (
+            <Marker position={[formData.location.coordinates.lat, formData.location.coordinates.lng]} />
+          )}
+        </MapContainer>
 
         <button type="submit" className="submit-button">
           Add Listing

@@ -48,7 +48,12 @@ const ProfilePage = () => {
       <h2>Your Profile</h2>
 
       <div className="profile-section">
+      <div className="heading-and-button">
         <h3>My Listings</h3>
+        <Link to="/add-listing">
+          <button>Add a Listing</button>
+        </Link>
+      </div>
         {myListings.length > 0 ? (
           <div className="listings-grid">
             {myListings.map((listing) => (
@@ -62,9 +67,6 @@ const ProfilePage = () => {
         ) : (
           <div>
             <p>You have no listings.</p>
-            <Link to="/add-listing">
-              <button>Add a Listing</button>
-            </Link>
           </div>
         )}
       </div>
