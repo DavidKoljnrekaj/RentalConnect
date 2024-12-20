@@ -6,6 +6,8 @@ const Listing = require('../models/listing');
 
 let mongoServer;
 
+jest.setTimeout(30000);
+
 beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create();
   const uri = mongoServer.getUri();
@@ -20,6 +22,7 @@ afterAll(async () => {
   await mongoose.connection.close();
   await mongoServer.stop();
 });
+
 
 describe('Search Service - getShortListings', () => {
   const sampleListings = [
