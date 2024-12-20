@@ -12,6 +12,7 @@ export const AuthProvider = ({ children }) => {
     const storedUser = sessionStorage.getItem('user');
     const storedRole = sessionStorage.getItem('role');
     const storedUserId = sessionStorage.getItem('userId');
+
     if (storedUser && storedRole) {
       setUser(storedUser);
       setRole(storedRole);
