@@ -7,6 +7,7 @@ const ListingCard = ({ listing, className }) => {
 
   const handleCardClick = () => {
     navigate(`/listing/${listing._id}`); // Redirect to the listing details page
+    window.scrollTo(0, 0);
   };
 
   return (

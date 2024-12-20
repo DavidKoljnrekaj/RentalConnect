@@ -26,6 +26,15 @@ router.post('/', authMiddleware, (req, res, next) => {
   next();
 });
 
+router.put('/:id', authMiddleware, (req, res, next) => {
+  if (!req.user || !req.user.id) {
+    return res.status(401).json({ error: 'User ID not found in token' });
+  }
+  console.log(req.url)
+  req.headers['x-user-id'] = req.user.id; // Attach user ID to headers
+  next();
+});
+
 // Fetch favorited listings
 router.get('/favorites', authMiddleware, async (req, res) => {
   try {

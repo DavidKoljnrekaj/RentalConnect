@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import ListingService from '../../services/listingService';
 import { AuthContext } from '../../context/AuthContext';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import './Listing.css';
 import RelatedProjects from "./RelatedProjects";
@@ -147,15 +147,6 @@ const Listing = () => {
                   {listing.approvalStatus}
                 </span>
               </p>
-               {/* Render Edit Listing Button */}
-                {userId === listing.createdBy && (
-                  <button
-                    className="edit-listing-button"
-                    onClick={handleEditListing}
-                  >
-                    Edit Listing
-                  </button>
-                )}
               {/* Admin Actions */}
               {role === 'admin' && (
                 <div>
@@ -173,6 +164,15 @@ const Listing = () => {
                   </button>
                 </div>
               )}
+              {/* Render Edit Listing Button */}
+              {userId === listing.createdBy && (
+                  <button
+                    className="edit-listing-button"
+                    onClick={handleEditListing}
+                  >
+                    Edit Listing
+                  </button>
+                )}
             </div>
           )}
       </div>

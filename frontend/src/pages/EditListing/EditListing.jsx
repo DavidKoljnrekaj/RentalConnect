@@ -1,11 +1,37 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext"; // Import AuthContext
 import "../AddListing/AddListing.css"; // Reuse the styles from AddListing
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import ListingService from "../../services/listingService";
 
 const EditListing = () => {
   const { id } = useParams(); // Get listing ID from URL
+  const { userId } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchListing = async () => {
+      try {
+        const data = await ListingService.getListingById(id);
+        if (data.createdBy !== userId) {
+          alert("You are not authorized to edit this listing.");
+          navigate("/"); // Redirect to home or another page
+        } else {
+          setFormData({
+            ...data,
+            existingImages: data.images || [], // Populate existingImages with GCS links
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching listing:", error);
+        navigate("/"); // Redirect if an error occurs
+      }
+    };
+    fetchListing();
+  }, [id, userId, navigate]);
+
+  
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -24,22 +50,26 @@ const EditListing = () => {
       details: "",
     },
     images: [],
+    existingImages: [], // Array for existing images
     contact: { name: "", phone: "", email: "" },
     availability: { availableFrom: "", leaseDuration: "" },
   });
 
-  useEffect(() => {
-    // Fetch existing listing data to pre-fill the form
-    const fetchListing = async () => {
-      try {
-        const data = await ListingService.getListingById(id);
-        setFormData(data);
-      } catch (error) {
-        console.error("Error fetching listing:", error);
-      }
-    };
-    fetchListing();
-  }, [id]);
+
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files);
+    setFormData((prevData) => ({
+      ...prevData,
+      images: [...prevData.images, ...files],
+    }));
+  };
+
+  const handleRemoveExistingImage = (imageUrl) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      existingImages: prevData.existingImages.filter((img) => img !== imageUrl),
+    }));
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -73,6 +103,12 @@ const EditListing = () => {
     }
   };
 
+  const formatDate = (isoString) => {
+    if (!isoString) return "";
+    const date = new Date(isoString);
+    return date.toISOString().split("T")[0]; // Extract "yyyy-MM-dd"
+  };
+
   const LocationSelector = () => {
     useMapEvents({
       click: (e) => {
@@ -101,7 +137,17 @@ const EditListing = () => {
 
     const formDataToSend = new FormData();
 
-    // Helper function to handle nested objects
+    // Add new images
+    formData.images.forEach((file) => {
+      formDataToSend.append("images", file);
+    });
+
+    // Add existing images
+    formData.existingImages.forEach((imageUrl) => {
+      formDataToSend.append("existingImages", imageUrl);
+    });
+
+    // Add other fields
     const appendNestedData = (prefix, data) => {
       if (typeof data === "object" && data !== null && !Array.isArray(data)) {
         Object.entries(data).forEach(([key, value]) => {
@@ -112,11 +158,8 @@ const EditListing = () => {
       }
     };
 
-    // Flatten each top-level field
     Object.entries(formData).forEach(([key, value]) => {
-      if (key === "images") {
-        value.forEach((file) => formDataToSend.append("images", file));
-      } else {
+      if (key !== "images" && key !== "existingImages") {
         appendNestedData(key, value);
       }
     });
@@ -339,12 +382,23 @@ const EditListing = () => {
         </div>  
 
         <div className="form-group">
-          <label>Images</label>
-          <input
-            type="file"
-            multiple
-            onChange={handleImageChange}
-          />
+          <label>Existing Images</label>
+          <div className="existing-images">
+            {formData.existingImages.map((imageUrl, index) => (
+              <div key={index} className="image-container">
+                <img src={imageUrl} alt={`Listing image ${index + 1}`} className="listing-image" />
+                <button
+                  type="button"
+                  className="remove-image-button"
+                  onClick={() => handleRemoveExistingImage(imageUrl)}
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+          </div>
+          <label>Upload New Images</label>
+          <input type="file" multiple onChange={handleImageUpload} />
         </div>
 
         <div className="form-group inline">
@@ -352,7 +406,7 @@ const EditListing = () => {
           <input
             type="date"
             name="availability.availableFrom"
-            value={formData.availability.availableFrom}
+            value={formatDate(formData.availability.availableFrom)}
             onChange={handleChange}
             required
           />
@@ -399,10 +453,11 @@ const EditListing = () => {
         </div>
         <h3>Select Location on Map</h3>
         <MapContainer
-          center={[
-            formData.location.coordinates.lat || 45.815,
-            formData.location.coordinates.lng || 15.9819,
-          ]}
+          center={
+            formData.location.coordinates.lat && formData.location.coordinates.lng
+              ? [formData.location.coordinates.lat, formData.location.coordinates.lng]
+              : [45.815, 15.9819] // Default center
+          }
           zoom={12}
           scrollWheelZoom={true}
           style={{ height: "300px", marginBottom: "1rem" }}

@@ -76,7 +76,7 @@ const ListingService = {
    
     
     try {
-      const response = await httpClient.get(`/search/related-listings/${listingId}`);
+      const response = await httpClient.get(`/search/related-listings/${currentListingId}`);
       return response.data;
     } catch (error) {
       console.error('Error in ListingService.getRelatedListings:', error);
@@ -267,7 +267,11 @@ removeFromFavourites: async (listingId) => {
 
 editListing: async (id, updatedData) => {
   try {
-    const response = await httpClient.put(`/listings/${id}`, updatedData);
+    const response = await httpClient.put(`/listings/${id}`, updatedData, {
+      headers: {
+        'Content-Type': 'multipart/form-data', // Optional; browser will set automatically
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error editing listing:", error);

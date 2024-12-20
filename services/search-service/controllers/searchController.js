@@ -28,7 +28,7 @@ exports.getShortListings = async (req, res) => {
 exports.getMyListings = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
+    const limit = parseInt(req.query.limit) || 100;
 
     const userId = req.headers['x-user-id'];
 
@@ -89,10 +89,6 @@ exports.getShortListingsByIds = async (req, res) => {
 exports.getRelatedListings = async (req, res) => {
   try {
     const listingId = req.params.id;
-
-    if (!mongoose.Types.ObjectId.isValid(listingId)) {
-      return res.status(400).json({ error: 'Invalid listing ID' });
-    }
 
     const relatedListings = await searchService.getRelatedListings(listingId);
     res.status(200).json(relatedListings);
