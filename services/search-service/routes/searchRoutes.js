@@ -14,5 +14,7 @@ router.get('/pending-short-listings', searchController.getPendingShortListings);
 
 router.get('/map-listings', searchController.getMapListings);
 router.post('/short-listings', searchController.getShortListingsByIds)
+router.get('/related-listings/:id', searchController.getRelatedListings);
+
 
 module.exports = router;

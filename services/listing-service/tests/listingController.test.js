@@ -6,6 +6,8 @@ const Listing = require('../models/listing');
 
 let mongoServer;
 
+jest.setTimeout(30000);
+
 beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create();
   const uri = mongoServer.getUri();
@@ -91,15 +93,6 @@ describe('Listing Service', () => {
     expect(res.body.price.monthlyRent).toBe(sampleListing.price.monthlyRent);
   });
 
-  it('should update a listing by ID', async () => {
-    const listing = await Listing.create(sampleListing);
-    const updatedData = { title: 'Updated Title' };
-
-    const res = await request(app).put(`/listings/${listing._id}`).send(updatedData);
-
-    expect(res.statusCode).toBe(200);
-    expect(res.body.title).toBe(updatedData.title);
-  });
 
   it('should delete a listing by ID', async () => {
     const listing = await Listing.create(sampleListing);

@@ -11,7 +11,7 @@ console.log("gateway url:" + process.env.REACT_APP_API_URL)
 
 // Attach access token to requests
 httpClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('user'); // Retrieve token directly
+  const token = sessionStorage.getItem('user'); // Retrieve token directly
   if (token) {
     console.log('Token:', token); // Debug log to ensure the token is correct
     config.headers.Authorization = `Bearer ${token}`; // Attach token as Bearer

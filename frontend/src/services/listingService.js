@@ -73,16 +73,16 @@ const ListingService = {
    * @returns {Promise<object[]>} - List of related listings
    */
   getRelatedListings: async (currentListingId) => {
-    // Uncomment the following code to use the real implementation
-    /*
+   
+    
     try {
-      const response = await httpClient.get(`/listings/${currentListingId}/related`);
+      const response = await httpClient.get(`/search/related-listings/${currentListingId}`);
       return response.data;
     } catch (error) {
       console.error('Error in ListingService.getRelatedListings:', error);
       throw error.response ? error.response.data : error;
     }
-    */
+    /*
     // Dummy data for testing
     return [
       {
@@ -109,7 +109,7 @@ const ListingService = {
         image: kitchenImage,
         price: { monthlyRent: 600 },
       },
-    ];
+    ];*/
   },
 
 
@@ -264,6 +264,21 @@ removeFromFavourites: async (listingId) => {
     throw error.response ? error.response.data : error;
   }
 },
+
+editListing: async (id, updatedData) => {
+  try {
+    const response = await httpClient.put(`/listings/${id}`, updatedData, {
+      headers: {
+        'Content-Type': 'multipart/form-data', // Optional; browser will set automatically
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error editing listing:", error);
+    throw error;
+  }
+},
+
 
 };
 
