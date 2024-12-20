@@ -28,7 +28,7 @@ exports.getShortListings = async (req, res) => {
 exports.getMyListings = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
+    const limit = parseInt(req.query.limit) || 100;
 
     const userId = req.headers['x-user-id'];
 
@@ -80,6 +80,18 @@ exports.getShortListingsByIds = async (req, res) => {
     const listingIds = req.body.listingIds;
     const listings = await searchService.getShortListingsByIds(listingIds);
     res.status(200).json(listings);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+
+exports.getRelatedListings = async (req, res) => {
+  try {
+    const listingId = req.params.id;
+
+    const relatedListings = await searchService.getRelatedListings(listingId);
+    res.status(200).json(relatedListings);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

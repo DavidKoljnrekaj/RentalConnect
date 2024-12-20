@@ -102,3 +102,40 @@ exports.getShortListingsByIds = async (listingIds) => {
     );
     return listings
 };
+
+exports.getRelatedListings = async (listingId) => {
+  try {
+    const listing = await Listing.findById(listingId, {
+      'price.monthlyRent': 1,
+      'location.coordinates': 1,
+      'propertyDetails.type': 1,
+    });
+
+    if (!listing || !listing.location.coordinates.lat || !listing.location.coordinates.lng) {
+      throw new Error('Listing not found or missing coordinates');
+    }
+
+    const { lat, lng } = listing.location.coordinates;
+    const type = listing.propertyDetails.type;
+    const price = listing.price.monthlyRent;
+
+    const minPrice = price * 0.8; // 20% below the listing price
+    const maxPrice = price * 1.2; // 20% above the listing price
+
+    const nearbyListings = await Listing.find({
+      _id: { $ne: listingId }, // Exclude the current listing
+      'price.monthlyRent': { $gte: minPrice, $lte: maxPrice },
+      'propertyDetails.type': type,
+      'location.coordinates.lat': { $ne: null },
+      'location.coordinates.lng': { $ne: null },
+    })
+      .limit(4)
+      .select('title price.monthlyRent location.coordinates images') // Return only necessary fields
+      .lean(); // Return plain objects
+
+    return nearbyListings;
+  } catch (error) {
+    console.error('Error fetching related listings:', error);
+    throw error;
+  }
+};

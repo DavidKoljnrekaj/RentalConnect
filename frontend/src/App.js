@@ -8,6 +8,7 @@ import ListingsPage from './pages/ListingsPage/ListingsPage'
 import AddListing from './pages/AddListing/AddListing';
 import MapPage from './pages/MapPage/MapPage';
 import ProfilePage from './pages/Profile/ProfilePage';
+import EditListing from './pages/EditListing/EditListing';
  
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/add-listing" element={<AddListing />} />
         <Route path="/map" element={<MapPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/edit-listing/:id" element={<EditListing />} />
       </Routes>
     </Router>
   );
